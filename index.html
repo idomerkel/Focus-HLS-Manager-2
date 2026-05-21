@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus HLS - Command & AI Dashboard (OpenAI)</title>
+    <title>Focus HLS - HQ Master Command Desk</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -17,69 +17,64 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--dark-bg); color: #caf0f8; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        .sidebar { width: 350px; background: var(--panel-bg); border-left: 2px solid var(--cyber-blue); display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; overflow: hidden;}
-        .sidebar-logo-container { padding: 20px; text-align: center; background: #000; border-bottom: 2px solid var(--cyber-blue); flex-shrink:0;}
-        .sidebar-logo-container h1 { color: #fff; margin: 0; }
+        .sidebar { width: 320px; background: var(--panel-bg); border-left: 2px solid var(--cyber-blue); display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; }
+        .sidebar-logo-container { padding: 20px; text-align: center; background: #000; border-bottom: 2px solid var(--cyber-blue); }
+        .sidebar-logo-container h1 { color: #fff; margin: 0; font-size: 1.6em; }
         
-        .nav-btn { padding: 15px 20px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; font-weight: bold; background: #000; flex-shrink:0;}
+        .nav-btn { padding: 15px 20px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; font-weight: bold; background: #000; }
         .nav-btn:hover, .nav-btn.active { background: #111; color: var(--cyber-blue); border-right: 4px solid var(--cyber-blue); }
         
         .sidebar-content { flex: 1; overflow-y: auto; padding: 10px; }
-        .group-header { background: #111; color: var(--focus-orange); font-weight: bold; padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 0.85em; text-transform: uppercase; }
-        
-        .session-item { padding: 10px; border-bottom: 1px solid #222; font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #aaa; background: var(--panel-bg); margin: 2px 0; border-radius: 4px;}
+        .session-item { padding: 10px; border-bottom: 1px solid #222; font-size: 0.9em; cursor: pointer; color: #aaa; background: var(--panel-bg); margin: 2px 0; border-radius: 4px;}
         .session-item.active { border-right: 4px solid var(--cyber-blue); color: #fff; background: #000; }
 
         .main-content { flex: 1; padding: 15px; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .view-panel { display: none; flex-direction: column; gap: 15px; padding-bottom: 30px; }
         .view-panel.active { display: flex; }
 
-        .telemetry-row { height: 18vh; min-height: 120px; background: #000; border: 1px solid var(--cyber-blue); position: relative; border-radius: 8px; overflow: hidden; flex-shrink: 0;}
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; min-height: 0; }
+        .telemetry-row { height: 16vh; min-height: 110px; background: #000; border: 1px solid var(--cyber-blue); border-radius: 8px; overflow: hidden; flex-shrink: 0;}
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
         
-        .card { background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid #1a2235; display: flex; flex-direction: column; }
-        .card-title { margin-top: 0; font-size: 0.9em; color: var(--text-muted); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; flex-shrink:0;}
+        .card { background: var(--panel-bg); padding: 18px; border-radius: 8px; border: 1px solid #1a2235; display: flex; flex-direction: column; margin-bottom: 10px;}
+        .card-title { margin-top: 0; font-size: 0.95em; color: var(--text-muted); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 12px; }
         
-        input, select, button { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: white; border-radius: 4px; margin-bottom: 15px; }
-        button { background: var(--cyber-blue); color: #000; font-weight: bold; cursor: pointer; border: none; }
-        button:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
+        label { font-size: 0.85em; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        input, select, button, textarea { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: white; border-radius: 4px; margin-bottom: 12px; }
+        textarea { resize: none; height: 60px; }
+        button { background: var(--cyber-blue); color: #000; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; }
+        button:disabled { background: #333 !important; color: #666 !important; cursor: not-allowed; }
         
-        .timeline-container { background: #000; padding: 15px; border-radius: 8px; border: 1px solid var(--cyber-blue); margin-top: 15px; }
-        .timeline-row-bar { height: 40px; display: flex; background: #222; margin-bottom: 10px; border-radius: 4px; overflow: hidden; position: relative; }
-        .timeline-label { font-size: 0.85em; font-weight: bold; color: var(--cyber-blue); margin-bottom: 5px; }
-        .timeline-block { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #000; font-weight: bold; }
+        .sub-task-builder { border: 1px dashed #444; padding: 10px; background: #0c101b; margin-bottom: 10px; border-radius: 6px; }
+
+        .tour-timeline-wrapper { background: #000; padding: 10px; border-radius: 6px; border: 1px solid var(--cyber-blue); margin-top: 10px; }
+        .tour-timeline-bar { height: 35px; display: flex; background: #222; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #444; }
+        .tour-timeline-block { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: bold; color: #000; text-align: center; border-left: 1px solid rgba(0,0,0,0.2); }
         
-        #global-ring-alert { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--alert-red); color: white; padding: 20px 40px; border-radius: 12px; z-index: 10000; font-size: 1.5em; font-weight: bold; text-align: center; animation: pulse 0.5s infinite alternate; }
-        #auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .pie-charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .mini-pie-card { background: #000; padding: 10px; border-radius: 6px; border: 1px solid #333; text-align: center; height: 220px; }
+        #global-ring-alert { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--alert-red); color: white; padding: 20px 40px; border-radius: 12px; z-index: 10000; font-size: 1.5em; font-weight: bold; text-align: center; }
+        #auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     <div id="auth-overlay">
-        <h2>מערכת פיקוח Focus HLS - כניסת הנהלה</h2>
-        <input type="text" id="mgr-username" placeholder="שם משתמש מנהל" style="width:300px; text-align:center;">
-        <input type="password" id="mgr-password" placeholder="סיסמה" style="width:300px; text-align:center;">
-        <select id="mgr-role-select" style="width:300px; text-align:center;">
-            <option value="super">מנהל על (הרשאות מלאות)</option>
-            <option value="viewer">מנהל מפקח (צפייה בלבד)</option>
-        </select>
-        <button onclick="loginManager()" style="width:300px; background:var(--focus-orange); color:#fff;">התחבר למערכת</button>
+        <h2 style="color: var(--cyber-blue); margin-bottom: 5px;">FOCUS HLS - מנהלת בקרה מרכזית</h2>
+        <p style="color: #666; margin-bottom: 20px;">מערכת אימות הרשאות משתמש מבוססת ענן</p>
+        <input type="text" id="mgr-username" placeholder="שם משתמש ניהולי" style="width:320px; text-align:center;">
+        <input type="password" id="mgr-password" placeholder="סיסמת גישה מאובטחת" style="width:320px; text-align:center;">
+        <button onclick="attemptSecureLogin()" style="width:320px; background:var(--focus-orange); color:#fff;">התחבר למרכז הפיקוח</button>
     </div>
 
     <div id="global-ring-alert">
-        🚨 התרעת מערכת קריטית 🚨<br>
-        <div id="alert-details" style="font-size:0.6em; margin-top:5px; color:#ffcc00;"></div>
-        <button onclick="acknowledgeIncident()" style="margin-top:15px; background:var(--task-green); color:#000; width:auto; padding:5px 20px;">סמן כטופל ומיוצב</button>
+        🚨 התרעה חמורה במערכת 🚨<br>
+        <div id="alert-details" style="font-size:0.65em; margin-top:5px; color:#ffcc00;"></div>
+        <button onclick="acknowledgeIncident()" style="margin-top:15px; background:var(--task-green); color:#000; width:auto; padding:6px 20px;">סמן כטופל</button>
     </div>
 
     <div class="sidebar">
-        <div class="sidebar-logo-container"><h1>FOCUS <span style="color:var(--cyber-blue)">HLS</span></h1></div>
+        <div class="sidebar-logo-container"><h1>FOCUS <span style="color:var(--cyber-blue)">HLS</span></h1><div id="role-badge" style="font-size:0.75em; color:var(--focus-orange); font-weight:bold; margin-top:3px;"></div></div>
         <div class="nav-btn active" onclick="switchView('dashboard')">לוח בקרה חי</div>
-        <div class="nav-btn" onclick="switchView('tasks')">ניהול והקצאת משימות</div>
-        <div class="nav-btn" onclick="switchView('reports')">אנליטיקה ודוחות היסטוריים</div>
-        <div class="nav-btn" onclick="switchView('users-setup')">ניהול משתמשים ו-BLE</div>
+        <div class="nav-btn" onclick="switchView('tours-setup')">בנייה והקצאת סיורים</div>
+        <div class="nav-btn" onclick="switchView('users-setup')">ניהול משתמשים וזכויות</div>
         <div class="sidebar-content" id="session-list"></div>
     </div>
 
@@ -88,59 +83,84 @@
             <div class="telemetry-row"><canvas id="telChart"></canvas></div>
             <div class="dashboard-grid">
                 <div class="card">
-                    <h2 id="focus-name" class="profile-name">אין יעד נבחר</h2>
-                    <div id="focus-status" style="display:inline-block; padding:5px; background:#333;">סטטוס: סטנדביי</div>
-                    <p>עוצמת שמע סביבתית: <span id="focus-mic">-- dB</span></p>
-                    <div style="height:150px; background:#000;"><canvas id="locChart"></canvas></div>
+                    <h2 id="focus-name" class="profile-name">אין שומר נבחר</h2>
+                    <div id="focus-status" style="display:inline-block; padding:4px 10px; background:#333; margin:5px 0; font-weight:bold;">סטנדביי</div>
+                    <p>עוצמת רעש סביבתית: <span id="focus-mic" style="font-weight:bold;">-- dB</span></p>
+                    <div style="flex:1; background:#000; min-height:150px;"><canvas id="locChart"></canvas></div>
                 </div>
                 <div class="card">
-                    <h3 class="card-title">הגדרות התרעות והודעות קופצות</h3>
-                    <div id="live-incident-log" style="background:#000; flex:1; padding:10px; overflow-y:auto; font-family:monospace; font-size:0.85em;"></div>
+                    <h3 class="card-title">יומן אירועים ופעילויות סיור בזמן אמת</h3>
+                    <div id="live-incident-log" style="background:#000; flex:1; padding:10px; overflow-y:auto; font-family:monospace; font-size:0.85em; color:#fff;"></div>
                 </div>
             </div>
         </div>
 
-        <div id="tasks" class="view-panel">
-            <div class="dashboard-grid">
-                <div class="card">
-                    <h3 class="card-title">הקצאת משימת סיור חדשה</h3>
-                    <label>בחר שומר פיזי:</label>
-                    <select id="task-guard-target"></select>
-                    <label>נקודת BLE מחייבת:</label>
-                    <select id="task-node-target"></select>
-                    <div style="display:flex; gap:10px;">
-                        <input type="time" id="task-time-start">
-                        <input type="time" id="task-time-end">
-                    </div>
-                    <input type="text" id="task-inst" placeholder="הנחיות לביצוע (למשל: בדיקת נעילת חלונות)">
-                    <input type="text" id="task-ai-prompt" placeholder="דגשים לניתוח ה-AI (למשל: לוודא שארבע המערכות ירוקות)">
-                    <button id="btn-push-task" onclick="scheduleTask()">דחוף משימה מאובטחת לקצה</button>
-                </div>
-                <div class="card">
-                    <h3 class="card-title">ציר זמן כפול וביצוע משימות</h3>
-                    <div class="timeline-container">
-                        <div class="timeline-label">ביצוע בפועל (חיישני קצה)</div>
-                        <div class="timeline-row-bar" id="actual-timeline-bar"></div>
-                        <div class="timeline-label">תכנון מנהל (חלונות סיור)</div>
-                        <div class="timeline-row-bar" id="planned-timeline-bar"></div>
-                    </div>
-                    <div id="task-list-display" style="margin-top:15px; overflow-y:auto; flex:1;"></div>
-                </div>
-            </div>
-        </div>
+        <div id="tours-setup" class="view-panel">
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1.1fr;">
+                <div class="card" style="overflow-y:auto; max-height:85vh;">
+                    <h3 class="card-title">בניית תוכנית סיור ונקודות ביקורת</h3>
+                    
+                    <label>בחר שומר לסיור:</label>
+                    <select id="tour-guard-select"></select>
 
-        <div id="reports" class="view-panel">
-            <div class="card">
-                <h3 class="card-title">מערכת תחקור היסטורית לאחור (Time-Travel)</h3>
-                <div style="display:flex; gap:10px; align-items:center;">
-                    <input type="date" id="audit-date" onchange="loadHistoricalDay()">
-                    <input type="range" id="time-slider" min="0" max="1439" value="720" oninput="onTimeSliderChange(this.value)">
-                    <span id="slider-time-label" style="font-weight:bold;">12:00</span>
+                    <label>כותרת הסיור הכוללת:</label>
+                    <input type="text" id="tour-title" placeholder="למשל: סיור לילה אגף מזרחי">
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div><label>זמן התחלה כולל:</label><input type="time" id="tour-start" onchange="updatePlannedTimelinePreview()"></div>
+                        <div><label>זמן סיום משוער:</label><input type="time" id="tour-end" onchange="updatePlannedTimelinePreview()"></div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:10px; border:1px solid #333; padding:8px; background:#0f1422; margin-bottom:10px;">
+                        <div>
+                            <label><input type="checkbox" id="tour-alert-enable" checked> הפעל התרעה מוקדמת לשומר</label>
+                        </div>
+                        <div>
+                            <label>כמה זמן טרם הביצוע?</label>
+                            <select id="tour-alert-leadtime" style="margin:0;">
+                                <option value="5">5 דקות לפני</option>
+                                <option value="10">10 דקות לפני</option>
+                                <option value="15">15 דקות לפני</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sub-task-builder">
+                        <h4 style="margin:0 0 10px 0; color:var(--cyber-blue); font-size:0.9em;">הוספת נקודת ביקורת BLE (תת-משימה בסיור)</h4>
+                        <label>בחר נקודת מיקום BLE:</label>
+                        <select id="sub-ble-select"></select>
+                        
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <div><label>שעת יעד מתחילת חלון:</label><input type="time" id="sub-time-start"></div>
+                            <div><label>שעת יעד עד חלון:</label><input type="time" id="sub-time-end"></div>
+                        </div>
+
+                        <label>הנחיות ודגשים קופצים (יופיעו כשהשומר יתקרב לתחנה):</label>
+                        <input type="text" id="sub-instruction" placeholder="למשל: לבדוק שאין שלולית מים ליד הדוד הירוק">
+
+                        <div style="border-top:1px solid #222; margin-top:10px; padding-top:5px;">
+                            <label><input type="checkbox" id="sub-requires-photo" onchange="document.getElementById('ai-prompt-wrapper').style.display=this.checked?'block':'none'"> המשימה מחייבת צילום תמונה</label>
+                            <div id="ai-prompt-wrapper" style="display:none; margin-top:5px;">
+                                <label>כותרת מבוקשת לתמונה (למשל: מד חום דיגיטלי):</label>
+                                <input type="text" id="sub-photo-title" placeholder="הכותרת שתופיע לשומר מעל כפתור הצילום">
+                                <label>הנחיות מותאמות לניתוח ה-AI החזותי (OpenAI):</label>
+                                <textarea id="sub-ai-prompt" placeholder="דייק את הניתוח כאן במידת הצורך..."></textarea>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addSubTaskToStageQueue()" style="background:var(--focus-orange); color:white; margin-top:5px; padding:6px;">+ הוסף נקודה זו לתוכנית הסיור</button>
+                    </div>
+
+                    <button id="btn-save-entire-tour" onclick="commitEntireTourToFirebase()" style="background:var(--task-green); color:#000; font-size:1.1em; padding:12px;">שדר ודחף סיור שלם לשטח</button>
                 </div>
-                <div class="pie-charts-grid">
-                    <div class="mini-pie-card"><h4>התפלגות תנועה</h4><canvas id="pieMotion"></canvas></div>
-                    <div class="mini-pie-card"><h4>נוכחות במיקומי BLE</h4><canvas id="pieLocation"></canvas></div>
-                    <div class="mini-pie-card"><h4>רמות רעש סביבתי</h4><canvas id="pieAudio"></canvas></div>
+
+                <div class="card" style="max-height:85vh; overflow-y:auto;">
+                    <h3 class="card-title">תצוגת סרגל זמנים ונקודות סיור שהורכבו</h3>
+                    <div id="tour-queue-preview-list" style="flex:1; background:#000; padding:10px; overflow-y:auto; font-size:0.9em;"></div>
+                    
+                    <div class="tour-timeline-wrapper">
+                        <div class="timeline-label" style="font-size:0.8em;">סרגל זמנים מתוכנן לסיור (חלוקת משאבי שטח)</div>
+                        <div class="tour-timeline-bar" id="planned-tour-timeline-preview"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,23 +168,29 @@
         <div id="users-setup" class="view-panel">
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3 class="card-title">הגדרת משתמשים חדשים לפיילוט (שומרים/מנהלים)</h3>
-                    <input type="text" id="setup-username" placeholder="שם משתמש / קריאה">
-                    <input type="password" id="setup-password" placeholder="סיסמה חסויה">
-                    <select id="setup-type">
-                        <option value="guard_Security">שומר - צוות אבטחה</option>
-                        <option value="guard_Maintenance">שומר - צוות טכני</option>
-                        <option value="mgr_viewer">מנהל מפקח (Viewer בלבד)</option>
+                    <h3 class="card-title">ניהול פרופילי משתמשים והרשאות מערכת קשיחות</h3>
+                    <label>שם משתמש / קריאה חמ"ל:</label>
+                    <input type="text" id="new-user-name" placeholder="למשל: Guard-Beta או Supervisor-01">
+                    <label>סיסמת גישה מוגנת:</label>
+                    <input type="password" id="new-user-pass" placeholder="נקבעת על ידי מנהל העל">
+                    <label>רמת זכויות והרשאה במערכת:</label>
+                    <select id="new-user-role">
+                        <option value="guard_Security">שומר - צוות אבטחה וסיור</option>
+                        <option value="guard_Maintenance">שומר - צוות אחזקה וטכני</option>
+                        <option value="manager_super">מנהל על (Super Manager - הרשאות עריכה מלאות)</option>
+                        <option value="manager_viewer">מנהל מפקח (Viewer - צפייה בלבד, ללא זכויות עריכה)</option>
                     </select>
-                    <button id="btn-create-user" onclick="createUserProfile()">רשם משתמש במאגר הענן</button>
-                    <div id="users-list-box" style="background:#000; padding:10px; flex:1; overflow-y:auto;"></div>
+                    <button id="btn-create-profile" onclick="executeProfileCreation()">רשום משתמש מאובטח בענן</button>
+                    <div id="pilot-users-list" style="background:#000; padding:10px; flex:1; overflow-y:auto; font-size:0.85em;"></div>
                 </div>
                 <div class="card">
-                    <h3 class="card-title">מיפוי ומתן שמות קבועים לעוגני BLE</h3>
-                    <input type="text" id="ble-raw-id" placeholder="מזהה חומרה מקורי (למשל: Node-041)">
-                    <input type="text" id="ble-alias-name" placeholder="שם מיקום בעברית (למשל: חדר שרתים 1)">
-                    <button id="btn-save-ble" onclick="registerBleNode()">קבע שם קבוע לעוגן מיקום</button>
-                    <div id="ble-list-box" style="background:#000; padding:10px; flex:1; overflow-y:auto;"></div>
+                    <h3 class="card-title">הגדרת שמות קבועים לעוגני חומרת BLE באתר</h3>
+                    <label>מזהה כתובת BLE מקורית (חומרה):</label>
+                    <input type="text" id="ble-hardware-id" placeholder="למשל: 00:1A:7D:DA:71:11 או Node-A">
+                    <label>שם מיקום פיזי בעברית (ברור לשומר):</label>
+                    <input type="text" id="ble-custom-name" placeholder="למשל: חדר שרתים קומה 2">
+                    <button id="btn-save-ble" onclick="executeBleNodeRegistration()">קבע שם קבוע לעוגן המיקום</button>
+                    <div id="pilot-ble-list" style="background:#000; padding:10px; flex:1; overflow-y:auto; font-size:0.85em;"></div>
                 </div>
             </div>
         </div>
@@ -175,118 +201,159 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let currentRole = "viewer"; 
+        let myRole = "manager_viewer"; 
         let currentSID = null, activeSessions = {}, currentIncidentKey = null;
-        let globalBleNodes = {};
+        let globalBleNodes = {}, currentTourSubTasks = [];
 
-        function loginManager() {
+        const defaultAIPromptHead = "אתה עוזר ניתוח ובקרת איכות חזותית מולטי-מודאלית עבור מערכת ניהול בניין (BMS) מתקדמת. נתח את התמונה באופן איכותי, זהה חריגות, נזילות, או נורות אזהרה בהתאם לבקשת המנהל הבאה ומקד את החריגה בקואורדינטות במידה וקיימת.";
+        document.getElementById('sub-ai-prompt').value = defaultAIPromptHead;
+
+        function attemptSecureLogin() {
             let user = document.getElementById('mgr-username').value;
-            let role = document.getElementById('mgr-role-select').value;
-            if(!user) return alert("אנא הזן שם משתמש");
-            
-            currentRole = role;
-            document.getElementById('auth-overlay').style.display = 'none';
-            
-            if(currentRole === "viewer") {
-                disableEditingUI();
-            }
-            initSystemPipelines();
+            let pass = document.getElementById('mgr-password').value;
+            if(!user || !pass) return alert("נא להזין פרטי גישה מלאים");
+
+            // בדיקה ישירה מול מאגר המשתמשים המוגן בענן
+            db.ref('users_database/' + user).once('value', snap => {
+                let uData = snap.val();
+                if(uData && uData.password === pass && uData.classification.startsWith('manager_')) {
+                    myRole = uData.classification;
+                    document.getElementById('auth-overlay').style.display = 'none';
+                    document.getElementById('role-badge').innerText = (myRole === "manager_super") ? "הרשאה: מנהל על" : "הרשאה: מפקח (צפייה בלבד)";
+                    
+                    if(myRole === "manager_viewer") enforceViewerReadOnlyRestrictions();
+                    initializeCoreSystemSyncPipelines();
+                } else {
+                    alert("שגיאת אימות: שם משתמש, סיסמה או סוג הרשאה אינם תקינים.");
+                }
+            });
         }
 
-        function disableEditingUI() {
-            document.getElementById('btn-push-task').disabled = true;
-            document.getElementById('btn-create-user').disabled = true;
+        function enforceViewerReadOnlyRestrictions() {
+            document.getElementById('btn-save-entire-tour').disabled = true;
+            document.getElementById('btn-create-profile').disabled = true;
             document.getElementById('btn-save-ble').disabled = true;
-            document.getElementById('btn-push-task').innerText = "חסום - צפייה בלבד";
+            document.getElementById('btn-save-entire-tour').innerText = "נעול - הרשאת צפייה בלבד";
         }
 
-        // --- CHARTS INITIALIZATION ---
+        // --- CHARTS INFRASTRUCTURE ---
         const ctxTel = document.getElementById('telChart').getContext('2d');
         let gData = { ax: new Array(100).fill(0), ay: new Array(100).fill(0), az: new Array(100).fill(9.8) };
-        let telChart = new Chart(ctxTel, { type: 'line', data: { labels: new Array(100).fill(''), datasets: [ { label: 'X', data: gData.ax, borderColor: '#ff0055', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Y', data: gData.ay, borderColor: '#00ff00', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Z', data: gData.az, borderColor: '#00b4d8', borderWidth: 1, pointRadius: 0, fill:false } ]}, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { min: -20, max: 20 }, x: { display: false } } } });
+        let telChart = new Chart(ctxTel, { type: 'line', data: { labels: new Array(100).fill(''), datasets: [ { label: 'X Axis', data: gData.ax, borderColor: '#ff0055', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Y Axis', data: gData.ay, borderColor: '#00ff00', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Z Axis', data: gData.az, borderColor: '#00b4d8', borderWidth: 1, pointRadius: 0, fill:false } ]}, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { min: -20, max: 20 }, x: { display: false } } } });
         
         const ctxLoc = document.getElementById('locChart').getContext('2d');
         let locChart = new Chart(ctxLoc, { type: 'line', data: { labels: new Array(30).fill(''), datasets: [] }, options: { responsive: true, maintainAspectRatio: false, animation: false } });
 
-        let pieM, pieL, pieA;
-        function initPieCharts() {
-            const opts = { responsive: true, maintainAspectRatio: false };
-            pieM = new Chart(document.getElementById('pieMotion').getContext('2d'), { type: 'pie', data: { labels: ['סטטי','סיור','ריצה'], datasets: [{ data: [0,0,0], backgroundColor: ['#333','#3498db','#f1c40f'] }] }, options: opts });
-            pieL = new Chart(document.getElementById('pieLocation').getContext('2d'), { type: 'pie', data: { labels: ['לא ידוע'], datasets: [{ data: [1], backgroundColor: ['#555'] }] }, options: opts });
-            pieA = new Chart(document.getElementById('pieAudio').getContext('2d'), { type: 'pie', data: { labels: ['שקט','מתון','חריג'], datasets: [{ data: [0,0,0], backgroundColor: ['#2ecc71','#e67e22','#e74c3c'] }] }, options: opts });
-        }
-
-        function initSystemPipelines() {
-            initPieCharts();
-            
-            // Sync BLE Nodes mapping definitions
+        function initializeCoreSystemSyncPipelines() {
             db.ref('registered_nodes').on('value', snap => {
                 globalBleNodes = snap.val() || {};
-                renderBleNodesList();
-                updateDropdownNodes();
+                renderBleNodesPilotList();
+                updateDropdownNodesSelectors();
             });
 
-            // Sync User Profiles List
             db.ref('users_database').on('value', snap => {
-                renderUsersList(snap.val() || {});
+                renderPilotUsersList(snap.val() || {});
+                updateGuardSelectionDropdowns(snap.val() || {});
             });
 
-            // Live streaming updates
             db.ref('active_shifts').on('value', snap => {
                 activeSessions = snap.val() || {};
                 renderSidebar();
-                updateGuardSelectionDropdowns();
-                processLiveTelemetryAndRules();
+                evaluateGlobalSafetyRules();
             });
         }
 
-        function processLiveTelemetryAndRules() {
+        function evaluateGlobalSafetyRules() {
             Object.keys(activeSessions).forEach(sid => {
-                let s = activeSessions[sid];
-                if(s.role !== "guard") return;
-
-                // Safety Alert Trigger Hook
+                let s = activeSessions[sid]; if(s.role !== "guard") return;
                 if(["SOS / Emergency", "Sleeping / Inactive"].includes(s.status) && s.status !== s._lastNotifiedStatus) {
                     currentIncidentKey = sid;
                     document.getElementById('global-ring-alert').style.display = 'block';
-                    document.getElementById('alert-details').innerText = `שומר: ${s.name} זוהה במצב קריטי: [${s.status}]`;
+                    document.getElementById('alert-details').innerText = `שומר: ${s.name} שינה סטטוס לחירום: [${s.status}]`;
                     db.ref(`active_shifts/${sid}/_lastNotifiedStatus`).set(s.status);
-                    
-                    document.getElementById('live-incident-log').innerHTML += `<p style='color:red;'>[${new Date().toLocaleTimeString()}] התרעה חמורה על ${s.name}: ${s.status}</p>`;
+                    document.getElementById('live-incident-log').innerHTML += `<p style='color:red;'>[${new Date().toLocaleTimeString()}] התרעת בטיחות קריטית - השומר ${s.name}: ${s.status}</p>`;
                 }
             });
             refreshLiveOutputs();
         }
 
-        // --- COMPUTER VISION: OPENAI INJECTION LAYER ---
-        async function runOpenAIVisionAnalysis(base64Image, promptTarget, taskRefPath) {
-            const apiKey = "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";
+        // --- STAGE BUILDING QUEUE LAW ---
+        function addSubTaskToStageQueue() {
+            let bleName = document.getElementById('sub-ble-select').value;
+            let tStart = document.getElementById('sub-time-start').value;
+            let tEnd = document.getElementById('sub-time-end').value;
+            let inst = document.getElementById('sub-instruction').value;
+            let reqPhoto = document.getElementById('sub-requires-photo').checked;
+            let pTitle = document.getElementById('sub-photo-title').value;
+            let aiPrompt = document.getElementById('sub-ai-prompt').value;
+
+            if(!bleName || !tStart || !tEnd || !inst) return alert("מלא את כל שדות חלון הזמן וההנחיות של נקודת הביקורת");
+
+            currentTourSubTasks.push({ bleName, tStart, tEnd, instruction: inst, requiresPhoto: reqPhoto, photoTitle: reqPhoto ? pTitle : "", aiPrompt: reqPhoto ? aiPrompt : "", status: "pending" });
+            
+            renderLocalTourQueueList();
+            updatePlannedTimelinePreview();
+
+            // איפוס שדות מקומיים
+            document.getElementById('sub-time-start').value = ''; document.getElementById('sub-time-end').value = '';
+            document.getElementById('sub-instruction').value = ''; document.getElementById('sub-requires-photo').checked = false;
+            document.getElementById('ai-prompt-wrapper').style.display = 'none';
+            document.getElementById('sub-ai-prompt').value = defaultAIPromptHead;
+        }
+
+        function renderLocalTourQueueList() {
+            let box = document.getElementById('tour-queue-preview-list'); box.innerHTML = '';
+            currentTourSubTasks.forEach((t, index) => {
+                box.innerHTML += `<div style="background:#111; padding:8px; margin-bottom:5px; border-right:3px solid var(--focus-orange);">
+                    <strong>תחנה: ${t.bleName} [מ-${t.tStart} עד-${t.tEnd}]</strong><br>
+                    הנחיות: ${t.instruction} ${t.requiresPhoto ? `<br><small style="color:var(--cyber-blue)">צילום מחייב: ${t.photoTitle}</small>` : ''}
+                    <button onclick="currentTourSubTasks.splice(${index},1); renderLocalTourQueueList(); updatePlannedTimelinePreview();" style="width:auto; padding:2px 8px; font-size:0.8em; background:red; color:white; margin-top:3px; display:block;">הסר נקודה</button>
+                </div>`;
+            });
+        }
+
+        function updatePlannedTimelinePreview() {
+            const bar = document.getElementById('planned-tour-timeline-preview'); bar.innerHTML = '';
+            let tStartTour = document.getElementById('tour-start').value;
+            let tEndTour = document.getElementById('tour-end').value;
+            if(!tStartTour || !tEndTour || currentTourSubTasks.length === 0) return;
+
+            currentTourSubTasks.forEach(t => {
+                bar.innerHTML += `<div class="tour-timeline-block" style="background:var(--focus-orange); width:${100 / currentTourSubTasks.length}%; font-size:0.7em;">${t.bleName}<br>(${t.tStart})</div>`;
+            });
+        }
+
+        function commitEntireTourToFirebase() {
+            if(myRole === "manager_viewer") return;
+            let targetGuard = document.getElementById('tour-guard-select').value;
+            let title = document.getElementById('tour-title').value;
+            let startTour = document.getElementById('tour-start').value;
+            let endTour = document.getElementById('tour-end').value;
+            let alertLead = document.getElementById('tour-alert-leadtime').value;
+            let alertEnable = document.getElementById('tour-alert-enable').checked;
+
+            if(!targetGuard || !title || !startTour || !endTour || currentTourSubTasks.length === 0) {
+                return alert("נא לוודא שכל כותרות הזמנים, פרטי הסיור ולפחות נקודת ביקורת אחת הוזנו בתוכנית.");
+            }
+
+            let tourPayload = { title, startTour, endTour, alertEnable, alertLeadMinutes: alertEnable ? alertLead : 0, subTasks: currentTourSubTasks, status: "active", createdAt: Date.now() };
+            
+            db.ref(`active_shifts/${targetGuard}/assigned_tour`).set(tourPayload);
+            alert(`תוכנית סיור מלאה הכוללת ${currentTourSubTasks.length} נקודות ביקורת נדחפה בהצלחה לשומר.`);
+            
+            currentTourSubTasks = []; document.getElementById('tour-title').value = '';
+            renderLocalTourQueueList(); document.getElementById('planned-tour-timeline-preview').innerHTML = '';
+        }
+
+        // --- COMPUTER VISION: OPENAI INJECTION CORE ---
+        async function executeOpenAILayerAnalysis(base64Image, specificPrompt, taskPath) {
+            const apiKey = "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";
             const url = "https://api.openai.com/v1/chat/completions";
             const pureBase64 = base64Image.includes(",") ? base64Image.split(',')[1] : base64Image;
 
-            const systemInstruction = `You are an expert industrial quality control AI for Focus HLS. 
-            Analyze the image based on the manager's specific instructions: "${promptTarget}".
-            
-            CRITICAL CHECKPOINT RULES:
-            1. Look for a building management system dashboard (BMS) with cooling systems.
-            2. Check indicator lights next to each system name/temperature:
-               - GREEN dot = System Normal (OK).
-               - GRAY dot = System Off/Disabled. If ALL systems are gray, trigger a failure indicating "All cooling systems are OFF".
-               - RED dot = Critical Temperature Malfunction.
-            3. If a malfunction or bad temperature state is detected, you must pinpoint the exact physical location of the failure on the image.
-
-            You MUST reply strictly in a valid JSON format with no markdown wrappers or code blocks.
-            JSON Structure required:
-            {
-              "isFailure": true/false,
-              "description": "Detailed explanation of the anomaly in Hebrew (e.g., 'תקלה חמורה במערכת הקירור')",
-              "boundingBox": [ymin, xmin, ymax, xmax] 
-            }
-            Note: Normalize bounding box numbers from 0 to 1000 based on the image dimensions. If no failure, set boundingBox to [0,0,0,0].`;
-
             const requestBody = {
                 model: "gpt-4o-mini",
-                messages: [{ role: "user", content: [ { type: "text", text: systemInstruction }, { type: "image_url", image_url: { url: `data:image/jpeg;base64,${pureBase64}` } } ] }],
+                messages: [{ role: "user", content: [ { type: "text", text: specificPrompt + " You MUST reply strictly in JSON format: {'isFailure': true/false, 'description': 'Hebrew string', 'boundingBox': [ymin, xmin, ymax, xmax]}" }, { type: "image_url", image_url: { url: `data:image/jpeg;base64,${pureBase64}` } } ] }],
                 response_format: { type: "json_object" }
             };
 
@@ -295,97 +362,53 @@
                 let data = await res.json();
                 let parsed = JSON.parse(data.choices[0].message.content);
                 
-                if (parsed.isFailure) {
-                    drawAnomalousBoundingBox(base64Image, parsed.boundingBox, parsed.description, taskRefPath);
+                if(parsed.isFailure) {
+                    drawAnomalousCanvasAlert(base64Image, parsed.boundingBox, parsed.description, taskPath);
                 } else {
-                    db.ref(taskRefPath).update({ status: "completed", auditReport: "אישור AI: המערכות נסרקו ונמצאו תקינות לחלוטין." });
+                    db.ref(taskPath).update({ status: "completed", auditReport: "אישור AI: הבדיקה החזותית עברה בהצלחה." });
                 }
-            } catch (e) {
-                console.error("OpenAI core execution pipeline failure", e);
-            }
+            } catch (e) { console.error("OpenAI pipeline failure", e); }
         }
 
-        function drawAnomalousBoundingBox(imgSrc, box, desc, path) {
-            let img = new Image();
-            img.src = imgSrc;
+        function drawAnomalousCanvasAlert(imgSrc, box, desc, path) {
+            let img = new Image(); img.src = imgSrc;
             img.onload = function() {
-                let canvas = document.createElement('canvas');
-                canvas.width = img.width; canvas.height = img.height;
+                let canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
                 let ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
-                
                 let ymin = (box[0]/1000)*img.height, xmin = (box[1]/1000)*img.width;
                 let ymax = (box[2]/1000)*img.height, xmax = (box[3]/1000)*img.width;
-                let w = xmax - xmin, h = ymax - ymin;
+                ctx.strokeStyle = "red"; ctx.lineWidth = 6; ctx.strokeRect(xmin, ymin, xmax-xmin, ymax-ymin);
+                ctx.fillStyle = "red"; ctx.font = "bold 24px sans-serif"; ctx.fillText("🚨 כשל זיהוי AI", xmin, ymin - 10);
                 
-                // עיגול אדום
-                ctx.strokeStyle = "#d90429"; ctx.lineWidth = 6;
-                ctx.beginPath();
-                ctx.arc(xmin + (w/2), ymin + (h/2), Math.max(w, h)/2 + 15, 0, 2*Math.PI);
-                ctx.stroke();
-                
-                // חץ
-                ctx.fillStyle = "#d90429";
-                ctx.font = "bold 24px Arial";
-                ctx.fillText("🚨 זיהוי חריגה קריטית - AI", xmin, ymin - 15);
-                
-                let annotatedData = canvas.toDataURL("image/jpeg");
-                db.ref(path).update({ status: "failed_anomaly", image: annotatedData, auditReport: `כשל חמור: ${desc}` });
-                triggerManagerCriticalAlert(`התרעת AI קריטית: ${desc}`);
+                db.ref(path).update({ status: "failed_anomaly", image: canvas.toDataURL("image/jpeg"), auditReport: `חריגה: ${desc}` });
+                triggerManagerCriticalAlert(`התרעת AI קריטית בתת משימה: ${desc}`);
             };
         }
 
-        // --- MANAGEMENT OPERATIONS ---
-        function registerBleNode() {
-            if(currentRole === "viewer") return;
-            let rawId = document.getElementById('ble-raw-id').value;
-            let alias = document.getElementById('ble-alias-name').value;
-            if(!rawId || !alias) return alert("מלא את שני השדות");
-            db.ref('registered_nodes/' + rawId).set(alias);
-            document.getElementById('ble-raw-id').value = '';
-            document.getElementById('ble-alias-name').value = '';
-        }
-
-        function createUserProfile() {
-            if(currentRole === "viewer") return;
-            let u = document.getElementById('setup-username').value;
-            let p = document.getElementById('setup-password').value;
-            let type = document.getElementById('setup-type').value;
+        // --- ADMINISTRATION AND AUX HANDLERS ---
+        function executeProfileCreation() {
+            if(myRole === "manager_viewer") return;
+            let u = document.getElementById('new-user-name').value;
+            let p = document.getElementById('new-user-pass').value;
+            let r = document.getElementById('new-user-role').value;
             if(!u || !p) return alert("הזן שם משתמש וסיסמה");
-            
-            db.ref('users_database/' + u).set({ username: u, password: p, classification: type });
-            alert(`משתמש ${u} נרשם בהצלחה לפיילוט.`);
+            db.ref('users_database/' + u).set({ username: u, password: p, classification: r });
+            alert(`משתמש ${u} נרשם לפיילוט.`);
         }
 
-        function scheduleTask() {
-            if(currentRole === "viewer") return;
-            let targetGuard = document.getElementById('task-guard-target').value;
-            let nodeAnchor = document.getElementById('task-node-target').value;
-            let timeStart = document.getElementById('task-time-start').value;
-            let timeEnd = document.getElementById('task-time-end').value;
-            let inst = document.getElementById('task-inst').value;
-            let aiPrompt = document.getElementById('task-ai-prompt').value;
-
-            if(!targetGuard || !timeStart || !timeEnd || !inst) return alert("מלא את פרטי המשימה הבסיסיים");
-            
-            let ref = db.ref(`active_shifts/${targetGuard}/tasks`).push();
-            ref.set({ id: ref.key, nodeAnchor, timeStart, timeEnd, instruction: inst, aiPrompt, status: "pending" });
-            alert("המשימה נדחפה בהצלחה למכשיר הקצה של השומר.");
+        function executeBleNodeRegistration() {
+            if(myRole === "manager_viewer") return;
+            let id = document.getElementById('ble-hardware-id').value;
+            let name = document.getElementById('ble-custom-name').value;
+            if(!id || !name) return alert("מלא את פרטי החומרה והשם");
+            db.ref('registered_nodes/' + id).set(name);
         }
 
-        function acknowledgeIncident() {
-            if(currentIncidentKey) {
-                db.ref(`active_shifts/${currentIncidentKey}`).update({ status: 'Standing / Active' });
-                db.ref(`active_shifts/${currentIncidentKey}/hardware_challenge`).remove();
-                document.getElementById('global-ring-alert').style.display = 'none';
-            }
-        }
-
-        // --- RENDERING HANDLERS ---
         function renderSidebar() {
             const list = document.getElementById('session-list'); list.innerHTML = '';
             Object.keys(activeSessions).forEach(sid => {
-                let s = activeSessions[sid]; if(s.role === "manager") return;
-                list.innerHTML += `<div class="session-item ${currentSID === sid ? 'active' : ''}" onclick="selectSession('${sid}')"><div><strong>${s.name}</strong> [${s.group}]<br><span>${s.status}</span></div></div>`;
+                let s = activeSessions[sid]; if(s.role !== "guard") return;
+                list.innerHTML += `<div class="session-item ${currentSID === sid ? 'active' : ''}" onclick="selectSession('${sid}')"><div><strong>${s.name}</strong> [צוות ${s.group}]<br><span>${s.status}</span></div></div>`;
             });
         }
 
@@ -394,17 +417,19 @@
             let s = activeSessions[sid];
             document.getElementById('focus-name').innerText = s.name;
             
-            db.ref(`active_shifts/${sid}/tasks`).on('value', snap => {
-                let tasks = snap.val() || {};
-                let display = document.getElementById('task-list-display'); display.innerHTML = '';
-                Object.keys(tasks).forEach(k => {
-                    let t = tasks[k];
-                    let imgHtml = t.image ? `<br><img src="${t.image}" style="max-width:100%; border:2px solid red;"/>` : '';
-                    display.innerHTML += `<div style="background:#000; padding:10px; margin-bottom:5px; border-right:3px solid var(--cyber-blue);"><strong>[${t.timeStart}-${t.timeEnd}] ${t.nodeAnchor}</strong><br>סטטוס: ${t.status}<br><small>${t.auditReport || 'אין דוח AI עדיין'}</small>${imgHtml}</div>`;
-                    
-                    if (t.status === "awaiting_ai_audit" && t.rawCapturedImage) {
-                        db.ref(`active_shifts/${sid}/tasks/${k}/status`).set("processing_ai");
-                        runOpenAIVisionAnalysis(t.rawCapturedImage, t.aiPrompt, `active_shifts/${sid}/tasks/${k}`);
+            db.ref(`active_shifts/${sid}/assigned_tour/subTasks`).on('value', snap => {
+                let list = document.getElementById('task-list-display'); list.innerHTML = '';
+                let subTasks = snap.val() || [];
+                subTasks.forEach((t, idx) => {
+                    let img = t.image ? `<br><img src="${t.image}" style="max-width:100%; border:2px solid red; margin-top:5px;"/>` : '';
+                    list.innerHTML += `<div style="background:#000; padding:10px; margin-bottom:5px; border-right:3px solid var(--cyber-blue);">
+                        <strong>[${t.tStart} - ${t.tEnd}] נקודת ביקורת: ${t.bleName}</strong><br>
+                        סטטוס ביצוע: ${t.status} <br><small>${t.auditReport || 'ממתין לסריקת קצה'}</small>${img}
+                    </div>`;
+
+                    if(t.status === "awaiting_ai_audit" && t.rawCapturedImage) {
+                        db.ref(`active_shifts/${sid}/assigned_tour/subTasks/${idx}/status`).set("processing_ai");
+                        executeOpenAILayerAnalysis(t.rawCapturedImage, t.aiPrompt, `active_shifts/${sid}/assigned_tour/subTasks/${idx}`);
                     }
                 });
             });
@@ -413,55 +438,37 @@
         function refreshLiveOutputs() {
             if(!currentSID || !activeSessions[currentSID]) return;
             let s = activeSessions[currentSID];
-            document.getElementById('focus-status').innerText = `סטטוס: ${s.status}`;
+            document.getElementById('focus-status').innerText = s.status;
             document.getElementById('focus-mic').innerText = `${Math.round(s.audio_db || 40)} dB`;
             if(s.telemetry_batch) {
                 s.telemetry_batch.data.forEach(d => { gData.ax.push(d.ax); gData.ax.shift(); gData.ay.push(d.ay); gData.ay.shift(); gData.az.push(d.az); gData.az.shift(); });
                 telChart.update();
             }
-            renderDualTimelines(currentSID);
         }
 
-        function renderDualTimelines(sid) {
-            let s = activeSessions[sid];
-            const pBar = document.getElementById('planned-timeline-bar'); pBar.innerHTML = '';
-            const aBar = document.getElementById('actual-timeline-bar'); aBar.innerHTML = '';
-            
-            if(s && s.tasks) {
-                Object.keys(s.tasks).forEach(k => { let t = s.tasks[k]; pBar.innerHTML += `<div class="timeline-block" style="background:var(--focus-orange); width:25%;">${t.nodeAnchor}</div>`; });
-            }
-            db.ref(`historical_logs/${sid}`).limitToLast(6).once('value', snap => {
-                let logs = snap.val() || {};
-                Object.keys(logs).forEach(k => { aBar.innerHTML += `<div class="timeline-block" style="background:var(--task-green); width:16%;">${logs[k].closestNode}</div>`; });
-            });
+        function renderBleNodesPilotList() {
+            let b = document.getElementById('pilot-ble-list'); b.innerHTML = '';
+            Object.keys(globalBleNodes).forEach(k => { b.innerHTML += `<p style='margin:3px 0;'>📍 <strong>${k}</strong> ➔ ${globalBleNodes[k]}</p>`; });
         }
 
-        function renderBleNodesList() {
-            let box = document.getElementById('ble-list-box'); box.innerHTML = '';
-            Object.keys(globalBleNodes).forEach(k => { box.innerHTML += `<p style="margin:4px 0; font-size:0.9em;">📍 <strong>${k}</strong> ➔ ${globalBleNodes[k]}</p>`; });
+        function renderPilotUsersList(users) {
+            let b = document.getElementById('pilot-users-list'); b.innerHTML = '';
+            Object.keys(users).forEach(k => { b.innerHTML += `<p style='margin:3px 0;'>👤 <strong>${k}</strong> - הרשאה: ${users[k].classification}</p>`; });
         }
 
-        function renderUsersList(users) {
-            let box = document.getElementById('users-list-box'); box.innerHTML = '';
-            Object.keys(users).forEach(k => { box.innerHTML += `<p style="margin:4px 0; font-size:0.9em;">👤 <strong>${k}</strong> (${users[k].classification})</p>`; });
+        function updateDropdownNodesSelectors() {
+            let s = document.getElementById('sub-ble-select'); s.innerHTML = '';
+            Object.keys(globalBleNodes).forEach(k => { s.innerHTML += `<option value="${globalBleNodes[k]}">${globalBleNodes[k]}</option>`; });
         }
 
-        function updateDropdownNodes() {
-            let sel = document.getElementById('task-node-target'); sel.innerHTML = '';
-            Object.keys(globalBleNodes).forEach(k => { sel.innerHTML += `<option value="${globalBleNodes[k]}">${globalBleNodes[k]}</option>`; });
+        function updateGuardSelectionDropdowns(users) {
+            let s = document.getElementById('tour-guard-select'); s.innerHTML = '';
+            Object.keys(users).forEach(k => { if(users[k].classification.startsWith('guard_')) s.innerHTML += `<option value="guard_${k}">${k}</option>`; });
         }
 
-        function updateGuardSelectionDropdowns() {
-            let sel = document.getElementById('task-guard-target');
-            if(sel.options.length === Object.keys(activeSessions).filter(k => activeSessions[k].role==='guard').length) return;
-            sel.innerHTML = '';
-            Object.keys(activeSessions).forEach(k => { if(activeSessions[k].role === 'guard') sel.innerHTML += `<option value="${k}">${activeSessions[k].name}</option>`; });
-        }
-
+        function acknowledgeIncident() { if(currentIncidentKey) { db.ref(`active_shifts/${currentIncidentKey}`).update({ status: 'Standing / Active' }); db.ref(`active_shifts/${currentIncidentKey}/hardware_challenge`).remove(); document.getElementById('global-ring-alert').style.display = 'none'; } }
         function switchView(id) { document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         function triggerManagerCriticalAlert(t) { document.getElementById('global-ring-alert').style.display='block'; document.getElementById('alert-details').innerText=t; }
-        function loadHistoricalDay() {}
-        function onTimeSliderChange(v) { document.getElementById('slider-time-label').innerText = `${String(Math.floor(v/60)).padStart(2,'0')}:${String(v%60).padStart(2,'0')}`; }
     </script>
 </body>
 </html>
