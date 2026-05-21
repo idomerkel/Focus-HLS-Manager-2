@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,20 +17,18 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--dark-bg); color: #caf0f8; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        .sidebar { width: 350px; background: var(--panel-bg); border-right: 2px solid var(--cyber-blue); display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; overflow: hidden;}
+        .sidebar { width: 350px; background: var(--panel-bg); border-left: 2px solid var(--cyber-blue); display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; overflow: hidden;}
         .sidebar-logo-container { padding: 20px; text-align: center; background: #000; border-bottom: 2px solid var(--cyber-blue); flex-shrink:0;}
         .sidebar-logo-container h1 { color: #fff; margin: 0; }
         
         .nav-btn { padding: 15px 20px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; font-weight: bold; background: #000; flex-shrink:0;}
-        .nav-btn:hover, .nav-btn.active { background: #111; color: var(--cyber-blue); border-left: 4px solid var(--cyber-blue); }
+        .nav-btn:hover, .nav-btn.active { background: #111; color: var(--cyber-blue); border-right: 4px solid var(--cyber-blue); }
         
         .sidebar-content { flex: 1; overflow-y: auto; padding: 10px; }
-        .group-header { background: #111; color: var(--focus-orange); font-weight: bold; padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 0.85em; text-transform: uppercase; border: 1px dashed transparent; }
-        .group-header.drag-over { border-color: var(--focus-orange); background: #222; }
+        .group-header { background: #111; color: var(--focus-orange); font-weight: bold; padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 0.85em; text-transform: uppercase; }
         
         .session-item { padding: 10px; border-bottom: 1px solid #222; font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #aaa; background: var(--panel-bg); margin: 2px 0; border-radius: 4px;}
-        .session-item.active { border-left: 4px solid var(--cyber-blue); color: #fff; background: #000; }
-        .del-btn { background: var(--alert-red); color: white; border: none; border-radius: 4px; cursor: pointer; padding: 4px 8px; font-weight: bold; }
+        .session-item.active { border-right: 4px solid var(--cyber-blue); color: #fff; background: #000; }
 
         .main-content { flex: 1; padding: 15px; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .view-panel { display: none; flex-direction: column; gap: 15px; padding-bottom: 30px; }
@@ -39,133 +37,65 @@
         .telemetry-row { height: 18vh; min-height: 120px; background: #000; border: 1px solid var(--cyber-blue); position: relative; border-radius: 8px; overflow: hidden; flex-shrink: 0;}
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; min-height: 0; }
         
-        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
-        
-        .card { background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid #1a2235; overflow: visible; display: flex; flex-direction: column; }
+        .card { background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid #1a2235; display: flex; flex-direction: column; }
         .card-title { margin-top: 0; font-size: 0.9em; color: var(--text-muted); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; flex-shrink:0;}
         
-        .profile-name { margin: 0; color: var(--cyber-blue); font-size: 1.8em; }
-        .profile-status { font-size: 1.2em; font-weight: bold; padding: 5px 15px; border-radius: 4px; background: #333; color: #fff; }
-        .profile-status.alert { background: var(--alert-red); animation: pulse 1s infinite; }
-        .profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em; }
-        .detail-item { background: #0b0f19; padding: 8px; border-radius: 6px; border: 1px solid #222; }
-        .detail-label { color: var(--text-muted); font-size: 0.8em; margin-bottom: 2px; }
-        .detail-val { color: #fff; font-weight: bold; }
+        input, select, button { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: white; border-radius: 4px; margin-bottom: 15px; }
+        button { background: var(--cyber-blue); color: #000; font-weight: bold; cursor: pointer; border: none; }
+        button:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
         
-        input, select { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: white; border-radius: 4px; margin-bottom: 15px; }
-        .cmd-btn, .action-btn { border: none; padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.9em; }
-        .action-btn { background: var(--cyber-blue); color: #000; width: 100%;}
-        
-        @keyframes pulse { 
-            0% { box-shadow: 0 0 0 0 rgba(217, 4, 41, 0.7); } 
-            70% { box-shadow: 0 0 0 10px rgba(217, 4, 41, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(217, 4, 41, 0); } 
-        }
-
-        .task-item { background: #000; padding: 10px; border-left: 3px solid var(--focus-orange); margin-bottom: 10px; font-size: 0.9em; cursor:pointer;}
-        .task-item:hover { background: #111; }
-        
-        .legend-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 0.8em; }
-        .legend-item { display: flex; align-items: center; background: #000; padding: 5px 10px; border-radius: 4px; border: 1px solid #333; }
-        .legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
-
-        #node-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
-        .modal-content { background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--cyber-blue); width: 350px; }
-        
-        #global-ring-alert { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--alert-red); color: white; padding: 20px 40px; border-radius: 12px; z-index: 10000; font-size: 1.5em; font-weight: bold; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); animation: pulse 0.5s infinite alternate; }
-
-        #auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .face-scan-box { width: 200px; height: 200px; border: 4px dashed var(--cyber-blue); border-radius: 20px; animation: scan 2s infinite alternate; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; flex-direction: column; gap: 10px;}
-        @keyframes scan { 0% { border-color: var(--cyber-blue); transform: scale(0.95); box-shadow: 0 0 10px var(--cyber-blue); } 100% { border-color: var(--focus-orange); transform: scale(1.05); box-shadow: 0 0 30px var(--focus-orange);} }
-        #manager-login-panel { display: none; text-align:center; z-index: 10000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; flex-direction: column; }
-
-        /* Dual Timeline & Historical Playback Styles */
         .timeline-container { background: #000; padding: 15px; border-radius: 8px; border: 1px solid var(--cyber-blue); margin-top: 15px; }
         .timeline-row-bar { height: 40px; display: flex; background: #222; margin-bottom: 10px; border-radius: 4px; overflow: hidden; position: relative; }
         .timeline-label { font-size: 0.85em; font-weight: bold; color: var(--cyber-blue); margin-bottom: 5px; }
-        .timeline-block { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #000; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .playback-controls { display: flex; gap: 10px; align-items: center; background: #111; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .timeline-block { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #000; font-weight: bold; }
+        
+        #global-ring-alert { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--alert-red); color: white; padding: 20px 40px; border-radius: 12px; z-index: 10000; font-size: 1.5em; font-weight: bold; text-align: center; animation: pulse 0.5s infinite alternate; }
+        #auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .pie-charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .mini-pie-card { background: #000; padding: 10px; border-radius: 6px; border: 1px solid #333; text-align: center; height: 220px; }
     </style>
 </head>
-<body id="main-body">
+<body>
 
     <div id="auth-overlay">
-        <div class="face-scan-box"><span>🔒</span><span>COMMAND SYSTEM</span></div>
-        <h2 style="color: var(--cyber-blue);">COMMANDER AUTHENTICATION</h2>
-        <p style="color: #888; max-width: 300px; text-align: center; margin-bottom: 30px;">Secure Hardware Biometrics Required.</p>
-        <button onclick="unlockManagerDevice()" style="width: 250px; background: var(--focus-orange); color: #fff;">INITIATE AUTHENTICATION</button>
-    </div>
-
-    <div id="manager-login-panel">
-        <h1 style="color:var(--cyber-blue); letter-spacing: 2px;">HQ CHECK-IN</h1>
-        <p style="color:#aaa;">Enter your Commander Callsign to access the dashboard.</p>
-        <input type="text" id="mgr-name-input" placeholder="e.g., Alpha-1" style="width:300px; text-align:center;">
-        <button onclick="loginManager()" style="width:300px; background:var(--focus-orange); color:#fff; font-weight:bold; padding:15px; border-radius:6px; border:none; cursor:pointer;">ACCESS DASHBOARD</button>
+        <h2>מערכת פיקוח Focus HLS - כניסת הנהלה</h2>
+        <input type="text" id="mgr-username" placeholder="שם משתמש מנהל" style="width:300px; text-align:center;">
+        <input type="password" id="mgr-password" placeholder="סיסמה" style="width:300px; text-align:center;">
+        <select id="mgr-role-select" style="width:300px; text-align:center;">
+            <option value="super">מנהל על (הרשאות מלאות)</option>
+            <option value="viewer">מנהל מפקח (צפייה בלבד)</option>
+        </select>
+        <button onclick="loginManager()" style="width:300px; background:var(--focus-orange); color:#fff;">התחבר למערכת</button>
     </div>
 
     <div id="global-ring-alert">
-        🚨 INCOMING EMERGENCY / CALL 🚨<br>
+        🚨 התרעת מערכת קריטית 🚨<br>
         <div id="alert-details" style="font-size:0.6em; margin-top:5px; color:#ffcc00;"></div>
-        <button onclick="switchView('comms'); answerVideoCall();" style="margin-top:15px; padding:10px 20px; font-weight:bold; background:#fff; color:#000; border:none; border-radius:6px; cursor:pointer;">RESPOND NOW</button>
-        <button onclick="acknowledgeIncident()" style="margin-top:15px; margin-left:10px; padding:10px 20px; font-weight:bold; background:var(--task-green); color:#000; border:none; border-radius:6px; cursor:pointer;">MARK AS HANDLED</button>
+        <button onclick="acknowledgeIncident()" style="margin-top:15px; background:var(--task-green); color:#000; width:auto; padding:5px 20px;">סמן כטופל ומיוצב</button>
     </div>
 
     <div class="sidebar">
         <div class="sidebar-logo-container"><h1>FOCUS <span style="color:var(--cyber-blue)">HLS</span></h1></div>
-        <div class="nav-btn active" onclick="switchView('dashboard')">Live Dashboard</div>
-        <div class="nav-btn" onclick="switchView('tasks')">Task Timeline Center</div>
-        <div class="nav-btn" onclick="switchView('reports')">Historical Analytics</div>
-        <div class="nav-btn" onclick="switchView('comms')">Communications</div>
-        <div class="nav-btn" onclick="switchView('setup')">Positioner Setup</div>
-        <div class="nav-btn" onclick="switchView('simulator')" style="color:#f77f00;">Demo Simulator</div>
+        <div class="nav-btn active" onclick="switchView('dashboard')">לוח בקרה חי</div>
+        <div class="nav-btn" onclick="switchView('tasks')">ניהול והקצאת משימות</div>
+        <div class="nav-btn" onclick="switchView('reports')">אנליטיקה ודוחות היסטוריים</div>
+        <div class="nav-btn" onclick="switchView('users-setup')">ניהול משתמשים ו-BLE</div>
         <div class="sidebar-content" id="session-list"></div>
     </div>
 
     <div class="main-content">
         <div id="dashboard" class="view-panel active">
             <div class="telemetry-row"><canvas id="telChart"></canvas></div>
-
             <div class="dashboard-grid">
-                <div style="display:flex; flex-direction: column; gap: 15px;">
-                    <div class="card" style="border-color: var(--cyber-blue); background: #0b0f19;">
-                        <div class="profile-header" style="display:flex; justify-content: space-between; align-items:center; margin-bottom:15px;">
-                            <div><h2 id="focus-name" class="profile-name">NO TARGET</h2><div id="focus-id" style="color: #555; font-size: 0.85em; font-family: monospace; margin-top: 5px;">---</div></div>
-                            <div id="focus-status" class="profile-status">STANDBY</div>
-                        </div>
-                        <div class="profile-details">
-                            <div class="detail-item"><div class="detail-label">Group</div><div class="detail-val" id="focus-group">Unassigned</div></div>
-                            <div class="detail-item"><div class="detail-label">Blood Type</div><div class="detail-val" id="focus-blood">--</div></div>
-                            <div class="detail-item" style="grid-column: span 2; border-color:var(--focus-orange);"><div class="detail-label">Surrounding Audio (Privacy-Safe Gauge)</div><div class="detail-val" id="focus-mic">-- dB</div></div>
-                        </div>
-                    </div>
-                    
-                    <div class="card" style="flex:1; min-height: 250px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
-                            <h3 class="card-title" style="border:none; margin:0; padding:0;">GUARD TO NODE DISTANCES</h3>
-                            <button class="action-btn" style="width: auto; padding: 5px 15px; font-size: 0.8em; background: #00e676;" onclick="openNodeModal()">ASSIGN NODE ALIAS</button>
-                        </div>
-                        <div style="flex: 1; min-height:150px; background: #000; border-radius: 6px; position:relative; padding: 5px;">
-                            <canvas id="locChart"></canvas>
-                        </div>
-                        <div class="legend-container" id="chart-legend"></div>
-                    </div>
+                <div class="card">
+                    <h2 id="focus-name" class="profile-name">אין יעד נבחר</h2>
+                    <div id="focus-status" style="display:inline-block; padding:5px; background:#333;">סטטוס: סטנדביי</div>
+                    <p>עוצמת שמע סביבתית: <span id="focus-mic">-- dB</span></p>
+                    <div style="height:150px; background:#000;"><canvas id="locChart"></canvas></div>
                 </div>
-
-                <div style="display:flex; flex-direction: column; gap: 15px;">
-                    <div class="card" style="flex:1;">
-                        <h3 class="card-title">TELEMETRY NOTIFICATIONS (CRITICAL SUBSCRIPTIONS)</h3>
-                        <div class="alert-settings-grid" id="alert-settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.8em; color: #ccc;"></div>
-                    </div>
-
-                    <div class="card">
-                         <h3 class="card-title">COMMAND OVERRIDES</h3>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <button class="cmd-btn" onclick="triggerTest('All Clear')" style="background: var(--cyber-blue); color: #000;">ALL CLEAR</button>
-                            <button class="cmd-btn" onclick="triggerTest('Evacuate')" style="background: var(--alert-red); color: #fff;">EVACUATE</button>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3 class="card-title">הגדרות התרעות והודעות קופצות</h3>
+                    <div id="live-incident-log" style="background:#000; flex:1; padding:10px; overflow-y:auto; font-family:monospace; font-size:0.85em;"></div>
                 </div>
             </div>
         </div>
@@ -173,568 +103,365 @@
         <div id="tasks" class="view-panel">
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3 class="card-title">SCHEDULER FOR <span id="task-target-name" style="color:var(--cyber-blue)">TARGET</span></h3>
-                    <input type="hidden" id="edit-task-id" value="">
-                    
-                    <label style="font-size:0.8em; color:#aaa;">Target BLE Checkpoint Node</label>
+                    <h3 class="card-title">הקצאת משימת סיור חדשה</h3>
+                    <label>בחר שומר פיזי:</label>
+                    <select id="task-guard-target"></select>
+                    <label>נקודת BLE מחייבת:</label>
                     <select id="task-node-target"></select>
-                    
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                        <div><label style="font-size:0.8em; color:#aaa;">Start Time</label><input type="time" id="task-time-start"></div>
-                        <div><label style="font-size:0.8em; color:#aaa;">End Time</label><input type="time" id="task-time-end"></div>
-                    </div>
-
-                    <label style="font-size:0.8em; color:#aaa;">Instructions</label>
-                    <input type="text" id="task-inst" placeholder="e.g., Verify facility lockup">
-                    
-                    <label style="font-size:0.8em; color:#aaa;">AI OpenAI Verification Instructions</label>
-                    <input type="text" id="task-ai-prompt" placeholder="e.g., Verify all 4 cooling lights are green, alert if any is red">
-
-                    <label><input type="checkbox" id="task-alert-fail" checked> Trigger Emergency Alert on Failure</label>
-                    <div style="margin-bottom:15px;"></div>
-
                     <div style="display:flex; gap:10px;">
-                        <button id="btn-save-task" class="action-btn" onclick="scheduleTask()">Push Task Plan</button>
-                        <button id="btn-delete-task" class="action-btn" style="background:var(--alert-red); color:#fff; display:none;" onclick="deleteTask()">Delete</button>
-                        <button id="btn-cancel-edit" class="action-btn" style="background:#333; color:#fff; display:none;" onclick="cancelEditTask()">Cancel</button>
+                        <input type="time" id="task-time-start">
+                        <input type="time" id="task-time-end">
                     </div>
+                    <input type="text" id="task-inst" placeholder="הנחיות לביצוע (למשל: בדיקת נעילת חלונות)">
+                    <input type="text" id="task-ai-prompt" placeholder="דגשים לניתוח ה-AI (למשל: לוודא שארבע המערכות ירוקות)">
+                    <button id="btn-push-task" onclick="scheduleTask()">דחוף משימה מאובטחת לקצה</button>
                 </div>
-
                 <div class="card">
-                    <h3 class="card-title">DUAL COMPARISON TIMELINE (24 HOUR SHIFT AUDIT)</h3>
+                    <h3 class="card-title">ציר זמן כפול וביצוע משימות</h3>
                     <div class="timeline-container">
-                        <div class="timeline-label">ACTUAL PERF (Location, Motion, Audio Tracker)</div>
+                        <div class="timeline-label">ביצוע בפועל (חיישני קצה)</div>
                         <div class="timeline-row-bar" id="actual-timeline-bar"></div>
-
-                        <div class="timeline-label">COMMANDMENT PLAN (Scheduled Duty Windows)</div>
+                        <div class="timeline-label">תכנון מנהל (חלונות סיור)</div>
                         <div class="timeline-row-bar" id="planned-timeline-bar"></div>
                     </div>
-                    
-                    <h3 class="card-title" style="margin-top:15px;">REGISTERED TASKS WINDOWS</h3>
-                    <div id="task-list-display" style="flex:1; overflow-y:auto;"></div>
+                    <div id="task-list-display" style="margin-top:15px; overflow-y:auto; flex:1;"></div>
                 </div>
             </div>
         </div>
 
         <div id="reports" class="view-panel">
             <div class="card">
-                <h3 class="card-title">TIME-TRAVEL HISTORICAL AUDITING & INSIGHT PATTERNS</h3>
-                <div class="playback-controls">
+                <h3 class="card-title">מערכת תחקור היסטורית לאחור (Time-Travel)</h3>
+                <div style="display:flex; gap:10px; align-items:center;">
                     <input type="date" id="audit-date" onchange="loadHistoricalDay()">
-                    <span style="font-size:0.85em; color:var(--cyber-blue);">Time Slider:</span>
-                    <input type="range" id="time-slider" min="0" max="1439" value="720" style="margin:0;" oninput="onTimeSliderChange(this.value)">
-                    <span id="slider-time-label" style="font-weight:bold; font-family:monospace; min-width:60px;">12:00</span>
+                    <input type="range" id="time-slider" min="0" max="1439" value="720" oninput="onTimeSliderChange(this.value)">
+                    <span id="slider-time-label" style="font-weight:bold;">12:00</span>
                 </div>
-
                 <div class="pie-charts-grid">
-                    <div class="mini-pie-card">
-                        <div style="font-size:0.8em; margin-bottom:5px; color:var(--text-muted);">MOTION STATES</div>
-                        <canvas id="pieMotion"></canvas>
-                    </div>
-                    <div class="mini-pie-card">
-                        <div style="font-size:0.8em; margin-bottom:5px; color:var(--text-muted);">BLE POSITIONING DISTRIBUTION</div>
-                        <canvas id="pieLocation"></canvas>
-                    </div>
-                    <div class="mini-pie-card">
-                        <div style="font-size:0.8em; margin-bottom:5px; color:var(--text-muted);">AUDIO AMPLITUDE LEVEL</div>
-                        <canvas id="pieAudio"></canvas>
-                    </div>
-                </div>
-
-                <div style="margin-top: 15px; display:flex; gap:10px;">
-                    <button class="action-btn" style="background:#3498db; color:#fff;" onclick="exportCSVReport('shift')">EXPORT SHIFT REPORT (CSV)</button>
-                    <button class="action-btn" style="background:#9b59b6; color:#fff;" onclick="exportCSVReport('weekly')">EXPORT WEEKLY INSIGHT LOGS</button>
+                    <div class="mini-pie-card"><h4>התפלגות תנועה</h4><canvas id="pieMotion"></canvas></div>
+                    <div class="mini-pie-card"><h4>נוכחות במיקומי BLE</h4><canvas id="pieLocation"></canvas></div>
+                    <div class="mini-pie-card"><h4>רמות רעש סביבתי</h4><canvas id="pieAudio"></canvas></div>
                 </div>
             </div>
         </div>
 
-        <div id="comms" class="view-panel">
+        <div id="users-setup" class="view-panel">
             <div class="dashboard-grid">
-                <div class="card" style="min-height: 400px;">
-                     <h3 class="card-title">TARGETED COMMUNICATIONS</h3>
-                    <select id="chat-target-select">
-                        <option value="Global">Broadcast Global</option>
-                        <option value="Group_Security">Group: Security</option>
-                        <option value="Group_Cleaning">Group: Cleaning</option>
-                        <option value="Group_Maintenance">Group: Maintenance</option>
+                <div class="card">
+                    <h3 class="card-title">הגדרת משתמשים חדשים לפיילוט (שומרים/מנהלים)</h3>
+                    <input type="text" id="setup-username" placeholder="שם משתמש / קריאה">
+                    <input type="password" id="setup-password" placeholder="סיסמה חסויה">
+                    <select id="setup-type">
+                        <option value="guard_Security">שומר - צוות אבטחה</option>
+                        <option value="guard_Maintenance">שומר - צוות טכני</option>
+                        <option value="mgr_viewer">מנהל מפקח (Viewer בלבד)</option>
                     </select>
-                    <div id="manager-chat-box" style="flex:1; background:#000; border:1px solid #333; padding:10px; overflow-y:auto; margin-bottom:15px; display:flex; flex-direction:column; gap:5px; min-height: 200px;"></div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="manager-chat-input" placeholder="Type message..." style="margin:0;">
-                        <button class="action-btn" style="width:auto;" onclick="sendManagerChat()">SEND</button>
-                    </div>
-                </div>
-        
-                <div class="card">
-                    <h3 class="card-title">LIVE VIDEO FEED</h3>
-                    <select id="video-target-select"><option value="">-- Select Guard to Call --</option></select>
-                    <div style="flex:1; background:#000; border:1px solid #444; position:relative; min-height:250px; margin-bottom:15px;">
-                        <video id="remoteVideo" autoplay playsinline style="width:100%; height:100%; object-fit:contain;"></video>
-                        <video id="localVideo" autoplay playsinline muted style="width:80px; height:100px; position:absolute; bottom:10px; right:10px; border:2px solid var(--cyber-blue);"></video>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button style="background:var(--task-green); color:#000;" class="action-btn" onclick="startManagerVideoCall()">CALL GUARD</button>
-                        <button style="background:var(--alert-red); color:#fff;" class="action-btn" onclick="hangUp()">END CALL</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="setup" class="view-panel">
-            <div class="dashboard-grid">
-                <div class="card">
-                    <h3 class="card-title">INITIALIZE BLE POSITIONER (OTA)</h3>
-                    <p style="font-size:0.9em; color:#aaa; margin-top:0;">Connect to a Blank Node to assign its permanent location name via Bluetooth GATT.</p>
-                    <input type="text" id="setup-pos-name" placeholder="e.g., Server Room 1" value="Server Room 1">
-                    <button class="action-btn" onclick="setupNewNode()" style="background: #3498db; color: #fff;">REGISTER & FLASH NODE</button>
-                    
-                    <h3 class="card-title" style="margin-top: 30px;">MANAGER BLE SCANNER</h3>
-                    <button class="action-btn" style="background:#00e676; color:#000;" onclick="startManagerBLETracking()">START MANAGER SCAN</button>
-                    <div id="mgr-ble-status" style="margin-top: 10px; color: var(--cyber-blue); font-size: 0.9em;">Status: Idle</div>
+                    <button id="btn-create-user" onclick="createUserProfile()">רשם משתמש במאגר הענן</button>
+                    <div id="users-list-box" style="background:#000; padding:10px; flex:1; overflow-y:auto;"></div>
                 </div>
                 <div class="card">
-                    <h3 class="card-title">REGISTERED MESH NODES</h3>
-                    <div id="pos-list"><div style="color: #555;" id="pos-empty-state">No positioners registered.</div></div>
+                    <h3 class="card-title">מיפוי ומתן שמות קבועים לעוגני BLE</h3>
+                    <input type="text" id="ble-raw-id" placeholder="מזהה חומרה מקורי (למשל: Node-041)">
+                    <input type="text" id="ble-alias-name" placeholder="שם מיקום בעברית (למשל: חדר שרתים 1)">
+                    <button id="btn-save-ble" onclick="registerBleNode()">קבע שם קבוע לעוגן מיקום</button>
+                    <div id="ble-list-box" style="background:#000; padding:10px; flex:1; overflow-y:auto;"></div>
                 </div>
-            </div>
-        </div>
-
-        <div id="simulator" class="view-panel">
-            <div class="card" style="max-width: 500px; margin: 0 auto; width: 100%;">
-                <h3 class="card-title" style="color:var(--focus-orange);">GUARD APP SIMULATOR (5 NODES)</h3>
-                <div id="sim-setup">
-                    <input type="text" id="sim-name" placeholder="Guard Name" value="Demo Guard">
-                    <button class="action-btn" style="background:var(--focus-orange); color:#fff;" onclick="startSimulatedShift()">Connect Device</button>
-                </div>
-                <div id="sim-controls" style="display:none;">
-                    <div style="color:#00e676; font-weight:bold; margin-bottom: 15px;">● Connected as: <span id="sim-active-name"></span></div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <button class="action-btn" style="background:#222; color:#fff;" onclick="setMockState('sit')">Sit</button>
-                        <button class="action-btn" style="background:#222; color:#fff;" onclick="setMockState('walk')">Walk</button>
-                        <button class="action-btn" style="background:#222; color:#fff;" onclick="setMockState('run')">Run</button>
-                        <button class="action-btn" style="background:var(--alert-red); color:#fff; grid-column: span 3;" onclick="setMockState('crash')">Simulate Fall Impact</button>
-                        <button class="action-btn" style="background:var(--focus-orange); color:#fff; grid-column: span 3;" onclick="setMockState('sleep')">Simulate Long Static Rest (Sleep Engine Test)</button>
-                    </div>
-                    <button class="action-btn" onclick="stopSimulatedShift()" style="background: #e74c3c; color:#fff; margin-top: 20px;">Disconnect Device</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="node-modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--cyber-blue);">Assign Node Alias</h3>
-            <select id="modal-node-select" style="background:#111; border:1px solid #333; width:100%; color:#fff; padding:10px; margin-bottom:15px;"></select>
-            <input type="text" id="modal-node-alias" placeholder="e.g., Server Room 1" style="background:#111; border:1px solid #333; width:100%; color:#fff; padding:10px; margin-bottom:15px;">
-            <div style="display:flex; gap:10px;">
-                <button class="action-btn" style="background:#333; color:#fff;" onclick="document.getElementById('node-modal').style.display='none'">Cancel</button>
-                <button class="action-btn" onclick="confirmNodeAlias()">Save Alias</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- BIO LOGIN & FIREBASE CONFIG ---
-        async function unlockManagerDevice() {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('manager-login-panel').style.display = 'flex';
-        }
-        let myManagerName = "HQ", managerId = "mgr_HQ";
-        function loginManager() {
-            let inputName = document.getElementById('mgr-name-input').value;
-            if(inputName) myManagerName = inputName;
-            managerId = "mgr_" + myManagerName.replace(/[^a-zA-Z0-9]/g, '');
-            document.getElementById('manager-login-panel').style.display = 'none';
-            setInterval(() => { db.ref('active_shifts/' + managerId).update({ id: managerId, name: myManagerName + " (HQ)", group: "Security", status: "Command Desk", role: "manager", timestamp: Date.now() }); }, 10000);
-        }
-
         const firebaseConfig = { apiKey: "AIzaSyAB2OJTPCyJaZ0BpE-FAEKdPW143VE3YDo", authDomain: "focushls-live.firebaseapp.com", projectId: "focushls-live", databaseURL: "https://focushls-live-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        let currentRole = "viewer"; 
         let currentSID = null, activeSessions = {}, currentIncidentKey = null;
-        let globalRegisteredNodes = [], alertSubscriptions = ["SOS / Emergency", "Sleeping / Inactive", "Man Down / Immobility"];
-        
-        // --- CHARTS & PIES ---
+        let globalBleNodes = {};
+
+        function loginManager() {
+            let user = document.getElementById('mgr-username').value;
+            let role = document.getElementById('mgr-role-select').value;
+            if(!user) return alert("אנא הזן שם משתמש");
+            
+            currentRole = role;
+            document.getElementById('auth-overlay').style.display = 'none';
+            
+            if(currentRole === "viewer") {
+                disableEditingUI();
+            }
+            initSystemPipelines();
+        }
+
+        function disableEditingUI() {
+            document.getElementById('btn-push-task').disabled = true;
+            document.getElementById('btn-create-user').disabled = true;
+            document.getElementById('btn-save-ble').disabled = true;
+            document.getElementById('btn-push-task').innerText = "חסום - צפייה בלבד";
+        }
+
+        // --- CHARTS INITIALIZATION ---
         const ctxTel = document.getElementById('telChart').getContext('2d');
         let gData = { ax: new Array(100).fill(0), ay: new Array(100).fill(0), az: new Array(100).fill(9.8) };
-        let telChart = new Chart(ctxTel, { type: 'line', data: { labels: new Array(100).fill(''), datasets: [ { label: 'X Axis', data: gData.ax, borderColor: '#ff0055', borderWidth: 1.5, pointRadius: 0, fill:false }, { label: 'Y Axis', data: gData.ay, borderColor: '#00ff00', borderWidth: 1.5, pointRadius: 0, fill:false }, { label: 'Z Axis', data: gData.az, borderColor: '#00b4d8', borderWidth: 1.5, pointRadius: 0, fill:false } ]}, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { min: -25, max: 25, display: true, grid: { color: '#222' } }, x: { display: false } } } });
+        let telChart = new Chart(ctxTel, { type: 'line', data: { labels: new Array(100).fill(''), datasets: [ { label: 'X', data: gData.ax, borderColor: '#ff0055', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Y', data: gData.ay, borderColor: '#00ff00', borderWidth: 1, pointRadius: 0, fill:false }, { label: 'Z', data: gData.az, borderColor: '#00b4d8', borderWidth: 1, pointRadius: 0, fill:false } ]}, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { min: -20, max: 20 }, x: { display: false } } } });
         
         const ctxLoc = document.getElementById('locChart').getContext('2d');
-        const nodeColors = ['#00e676', '#00b4d8', '#f77f00', '#d90429', '#9d4edd'];
-        let locChart = new Chart(ctxLoc, { type: 'line', data: { labels: new Array(30).fill(''), datasets: [] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 15, grid: { color: '#222' } }, x: { display: false } } } });
-        
-        let playbackQueue = [];
-        setInterval(() => { if(playbackQueue.length > 0) { const f = playbackQueue.shift(); gData.ax.push(f.ax); gData.ax.shift(); gData.ay.push(f.ay); gData.ay.shift(); gData.az.push(f.az); gData.az.shift(); telChart.update(); } }, 10);
+        let locChart = new Chart(ctxLoc, { type: 'line', data: { labels: new Array(30).fill(''), datasets: [] }, options: { responsive: true, maintainAspectRatio: false, animation: false } });
 
         let pieM, pieL, pieA;
         function initPieCharts() {
-            const opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
-            pieM = new Chart(document.getElementById('pieMotion').getContext('2d'), { type: 'pie', data: { labels: ['Static','Patrol','Sprint'], datasets: [{ data: [0,0,0], backgroundColor: ['#333','#3498db','#f1c40f'] }] }, options: opts });
-            pieL = new Chart(document.getElementById('pieLocation').getContext('2d'), { type: 'pie', data: { labels: ['Unknown'], datasets: [{ data: [1], backgroundColor: ['#555'] }] }, options: opts });
-            pieA = new Chart(document.getElementById('pieAudio').getContext('2d'), { type: 'pie', data: { labels: ['Quiet','Moderate','Loud'], datasets: [{ data: [0,0,0], backgroundColor: ['#2ecc71','#e67e22','#e74c3c'] }] }, options: opts });
+            const opts = { responsive: true, maintainAspectRatio: false };
+            pieM = new Chart(document.getElementById('pieMotion').getContext('2d'), { type: 'pie', data: { labels: ['סטטי','סיור','ריצה'], datasets: [{ data: [0,0,0], backgroundColor: ['#333','#3498db','#f1c40f'] }] }, options: opts });
+            pieL = new Chart(document.getElementById('pieLocation').getContext('2d'), { type: 'pie', data: { labels: ['לא ידוע'], datasets: [{ data: [1], backgroundColor: ['#555'] }] }, options: opts });
+            pieA = new Chart(document.getElementById('pieAudio').getContext('2d'), { type: 'pie', data: { labels: ['שקט','מתון','חריג'], datasets: [{ data: [0,0,0], backgroundColor: ['#2ecc71','#e67e22','#e74c3c'] }] }, options: opts });
         }
 
-        // --- REALTIME SYNC & PIPELINES ---
-        db.ref('registered_nodes').on('value', (snapshot) => {
-            globalRegisteredNodes = []; 
-            const posList = document.getElementById('pos-list'); 
-            const taskNodeSel = document.getElementById('task-node-target');
-            const data = snapshot.val() || {};
-            posList.innerHTML = ''; taskNodeSel.innerHTML = '<option value="None">No Specific Location Anchor</option>';
-            Object.keys(data).forEach(nodeName => {
-                globalRegisteredNodes.push(nodeName);
-                posList.innerHTML += `<div class="pos-item"><span class="pos-indicator"></span> <strong>${nodeName}</strong></div>`;
-                taskNodeSel.innerHTML += `<option value="${nodeName}">${nodeName}</option>`;
+        function initSystemPipelines() {
+            initPieCharts();
+            
+            // Sync BLE Nodes mapping definitions
+            db.ref('registered_nodes').on('value', snap => {
+                globalBleNodes = snap.val() || {};
+                renderBleNodesList();
+                updateDropdownNodes();
             });
-        });
 
-        // Anti-False Positive Engine with Dead Man Switch Logic
-        let processedBatches = {}, guardStateHistory = {};
-        db.ref('active_shifts').on('value', (snapshot) => {
-            activeSessions = snapshot.val() || {};
+            // Sync User Profiles List
+            db.ref('users_database').on('value', snap => {
+                renderUsersList(snap.val() || {});
+            });
+
+            // Live streaming updates
+            db.ref('active_shifts').on('value', snap => {
+                activeSessions = snap.val() || {};
+                renderSidebar();
+                updateGuardSelectionDropdowns();
+                processLiveTelemetryAndRules();
+            });
+        }
+
+        function processLiveTelemetryAndRules() {
             Object.keys(activeSessions).forEach(sid => {
-                let s = activeSessions[sid]; if (s.role === "manager") return;
-                
-                if (s.telemetry_batch && s.telemetry_batch.id !== processedBatches[sid]) {
-                    processedBatches[sid] = s.telemetry_batch.id;
-                    let rawState = analyzeMotionFeatures(s.telemetry_batch.data);
-                    
-                    if(!guardStateHistory[sid]) guardStateHistory[sid] = { consecutiveStatic: 0, lastAcknowledge: Date.now() };
-                    
-                    // Cross reference motion + audio
-                    if ((rawState === "Static / Sitting" || rawState === "Inert Profile") && s.audio_db < 45) {
-                        guardStateHistory[sid].consecutiveStatic++;
-                    } else {
-                        guardStateHistory[sid].consecutiveStatic = 0;
-                    }
+                let s = activeSessions[sid];
+                if(s.role !== "guard") return;
 
-                    // Strict Dead-Man Switch Interrogation Rules
-                    if (guardStateHistory[sid].consecutiveStatic > 15 && s.status !== "Sleeping / Inactive") { 
-                        // Guard hasn't moved for 15 samples (~15 secs), send hardware challenge request
-                        db.ref(`active_shifts/${sid}/hardware_challenge`).set({ timestamp: Date.now(), active: true });
-                    }
-                    
-                    // Log stream data to historical minute records for analytics charts
-                    logHistoricalMinute(sid, s, rawState);
-                }
-
-                // Global Alert Interceptor
-                if(alertSubscriptions.includes(s.status) && s.status !== s._lastNotifiedStatus) {
+                // Safety Alert Trigger Hook
+                if(["SOS / Emergency", "Sleeping / Inactive"].includes(s.status) && s.status !== s._lastNotifiedStatus) {
                     currentIncidentKey = sid;
                     document.getElementById('global-ring-alert').style.display = 'block';
-                    document.getElementById('alert-details').innerText = `Guard: ${s.name} changed state to [${s.status}]`;
+                    document.getElementById('alert-details').innerText = `שומר: ${s.name} זוהה במצב קריטי: [${s.status}]`;
                     db.ref(`active_shifts/${sid}/_lastNotifiedStatus`).set(s.status);
+                    
+                    document.getElementById('live-incident-log').innerHTML += `<p style='color:red;'>[${new Date().toLocaleTimeString()}] התרעה חמורה על ${s.name}: ${s.status}</p>`;
                 }
             });
-            renderSidebar(); updateTargetDropdowns(); refreshLiveOutputs();
-        });
-
-        function analyzeMotionFeatures(data) {
-            let magnitudes = data.map(f => Math.sqrt(f.ax**2 + f.ay**2 + f.az**2));
-            let maxG = Math.max(...magnitudes), minG = Math.min(...magnitudes), p2p = maxG - minG;
-            if (maxG > 22) return "Fall Impact Event";
-            if (p2p > 5.5) return "Sprint Profile";
-            if (p2p > 1.2) return "Patrol / Walking";
-            return "Static / Sitting";
+            refreshLiveOutputs();
         }
 
-        function logHistoricalMinute(sid, s, rawState) {
-            let minKey = Math.floor(Date.now() / 60000) * 60000;
-            let closestNode = "Unknown"; let minDist = 999;
-            if(s.ble_distances) {
-                Object.keys(s.ble_distances).forEach(n => { if(s.ble_distances[n] < minDist) { minDist = s.ble_distances[n]; closestNode = n; } });
-            }
-            db.ref(`historical_logs/${sid}/${minKey}`).set({
-                status: s.status || "Active", rawState: rawState, audio_db: s.audio_db || 40, closestNode: closestNode, dist: minDist
-            });
-        }
-
-        function acknowledgeIncident() {
-            if(currentIncidentKey) {
-                db.ref(`active_shifts/${currentIncidentKey}`).update({ status: 'Standing / Active', isManual: null });
-                db.ref(`active_shifts/${currentIncidentKey}/hardware_challenge`).remove();
-                if(guardStateHistory[currentIncidentKey]) guardStateHistory[currentIncidentKey].consecutiveStatic = 0;
-                document.getElementById('global-ring-alert').style.display = 'none';
-            }
-        }
-
-        // --- DUAL TIMELINE RENDERER ---
-        function renderDualTimelines(sid) {
-            const actualBar = document.getElementById('actual-timeline-bar');
-            const plannedBar = document.getElementById('planned-timeline-bar');
-            actualBar.innerHTML = ''; plannedBar.innerHTML = '';
-            
-            let s = activeSessions[sid]; if(!s) return;
-            
-            // Render Planned Timeline Blocks
-            if(s.tasks) {
-                Object.keys(s.tasks).forEach(k => {
-                    let t = s.tasks[k];
-                    let pctWidth = 20; // Hardcoded representation spacing block for UI purposes
-                    plannedBar.innerHTML += `<div class="timeline-block" style="width:${pctWidth}%; background:var(--focus-orange); color:#fff;">${t.nodeAnchor} (${t.timeStart})</div>`;
-                });
-            } else { plannedBar.innerHTML = '<div style="padding:10px; color:#555;">No Scheduled Plan Tasks Found.</div>'; }
-
-            // Render Actual Performance timeline blocks based on tracked historical telemetry minutes
-            db.ref(`historical_logs/${sid}`).limitToLast(10).once('value', snap => {
-                let minutes = snap.val();
-                if(minutes) {
-                    Object.keys(minutes).forEach(m => {
-                        let data = minutes[m];
-                        let color = data.status.includes('Alert') || data.status.includes('Sleep') ? 'var(--alert-red)' : 'var(--task-green)';
-                        actualBar.innerHTML += `<div class="timeline-block" style="width:10%; background:${color}; color:#000;">${data.closestNode}</div>`;
-                    });
-                } else { actualBar.innerHTML = '<div style="padding:10px; color:#555;">Awaiting live stream validation frames...</div>'; }
-            });
-        }
-
-        // --- OPENAI INTELLIGENT ONSITE COMPUTER VISION AI AUDITOR ---
+        // --- COMPUTER VISION: OPENAI INJECTION LAYER ---
         async function runOpenAIVisionAnalysis(base64Image, promptTarget, taskRefPath) {
-            // 🛑 הזן כאן את מפתח ה-OpenAI שלך (המתחיל ב-sk-...)
-            const apiKey = "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"; 
+            const apiKey = "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";
             const url = "https://api.openai.com/v1/chat/completions";
-            
-            // חילוץ ה-Raw Base64 בלבד במידת הצורך
             const pureBase64 = base64Image.includes(",") ? base64Image.split(',')[1] : base64Image;
 
+            const systemInstruction = `You are an expert industrial quality control AI for Focus HLS. 
+            Analyze the image based on the manager's specific instructions: "${promptTarget}".
+            
+            CRITICAL CHECKPOINT RULES:
+            1. Look for a building management system dashboard (BMS) with cooling systems.
+            2. Check indicator lights next to each system name/temperature:
+               - GREEN dot = System Normal (OK).
+               - GRAY dot = System Off/Disabled. If ALL systems are gray, trigger a failure indicating "All cooling systems are OFF".
+               - RED dot = Critical Temperature Malfunction.
+            3. If a malfunction or bad temperature state is detected, you must pinpoint the exact physical location of the failure on the image.
+
+            You MUST reply strictly in a valid JSON format with no markdown wrappers or code blocks.
+            JSON Structure required:
+            {
+              "isFailure": true/false,
+              "description": "Detailed explanation of the anomaly in Hebrew (e.g., 'תקלה חמורה במערכת הקירור')",
+              "boundingBox": [ymin, xmin, ymax, xmax] 
+            }
+            Note: Normalize bounding box numbers from 0 to 1000 based on the image dimensions. If no failure, set boundingBox to [0,0,0,0].`;
+
             const requestBody = {
-                model: "gpt-4o-mini", // דגם מהיר, מדויק וזול מאוד לניתוח אלמנטים חזותיים
-                messages: [
-                    {
-                        role: "user",
-                        content: [
-                            { 
-                                type: "text", 
-                                text: `Analyze this equipment picture context carefully based on these validation constraints: ${promptTarget}. Look for anomalies, cooling failures, unexpected down states, or warning indicators. You MUST reply strictly in a valid JSON format with no markdown wrappers or code blocks. Expected Format: {"isFailure": true/false, "description": "Short explanation", "boundingBox": [ymin, xmin, ymax, xmax]} (scale bounding box numbers 0 to 1000).` 
-                            },
-                            {
-                                type: "image_url",
-                                image_url: {
-                                    url: `data:image/jpeg;base64,${pureBase64}`
-                                }
-                            }
-                        ]
-                    }
-                ],
-                response_format: { type: "json_object" } // אכיפת פלט במבנה JSON תקין ומאובטח
+                model: "gpt-4o-mini",
+                messages: [{ role: "user", content: [ { type: "text", text: systemInstruction }, { type: "image_url", image_url: { url: `data:image/jpeg;base64,${pureBase64}` } } ] }],
+                response_format: { type: "json_object" }
             };
 
             try {
-                let res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-                
+                let res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }, body: JSON.stringify(requestBody) });
                 let data = await res.json();
                 let parsed = JSON.parse(data.choices[0].message.content);
                 
                 if (parsed.isFailure) {
-                    // הזרקת סימוני החץ והעיגול על גבי התמונה באמצעות קנבס
                     drawAnomalousBoundingBox(base64Image, parsed.boundingBox, parsed.description, taskRefPath);
                 } else {
-                    db.ref(taskRefPath).update({ status: "completed", auditReport: "AI Verified Pass: Equipment operating normally" });
+                    db.ref(taskRefPath).update({ status: "completed", auditReport: "אישור AI: המערכות נסרקו ונמצאו תקינות לחלוטין." });
                 }
-            } catch (e) { 
-                console.error("OpenAI Vision core execution pipeline failure", e); 
+            } catch (e) {
+                console.error("OpenAI core execution pipeline failure", e);
             }
         }
 
         function drawAnomalousBoundingBox(imgSrc, box, desc, path) {
-            let img = new Image(); img.src = imgSrc;
+            let img = new Image();
+            img.src = imgSrc;
             img.onload = function() {
-                let canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+                let canvas = document.createElement('canvas');
+                canvas.width = img.width; canvas.height = img.height;
                 let ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
                 
                 let ymin = (box[0]/1000)*img.height, xmin = (box[1]/1000)*img.width;
                 let ymax = (box[2]/1000)*img.height, xmax = (box[3]/1000)*img.width;
+                let w = xmax - xmin, h = ymax - ymin;
                 
+                // עיגול אדום
                 ctx.strokeStyle = "#d90429"; ctx.lineWidth = 6;
-                ctx.strokeRect(xmin, ymin, xmax - xmin, ymax - ymin);
-                ctx.fillStyle = "#d90429"; ctx.font = "24px sans-serif";
-                ctx.fillText("🚨 AI CRITICAL MALFUNCTION DETECTED", xmin, ymin - 10);
+                ctx.beginPath();
+                ctx.arc(xmin + (w/2), ymin + (h/2), Math.max(w, h)/2 + 15, 0, 2*Math.PI);
+                ctx.stroke();
+                
+                // חץ
+                ctx.fillStyle = "#d90429";
+                ctx.font = "bold 24px Arial";
+                ctx.fillText("🚨 זיהוי חריגה קריטית - AI", xmin, ymin - 15);
                 
                 let annotatedData = canvas.toDataURL("image/jpeg");
-                db.ref(path).update({ status: "failed_anomaly", image: annotatedData, auditReport: `AI CRITICAL DETECT: ${desc}` });
-                
-                // הקפצת חיווי ויזואלי מיידי בלוח הבקרה
-                triggerManagerCriticalAlert(`Critical failure detected by AI node: ${desc}`);
+                db.ref(path).update({ status: "failed_anomaly", image: annotatedData, auditReport: `כשל חמור: ${desc}` });
+                triggerManagerCriticalAlert(`התרעת AI קריטית: ${desc}`);
             };
         }
 
-        function triggerManagerCriticalAlert(txt) {
-            document.getElementById('global-ring-alert').style.display = 'block';
-            document.getElementById('alert-details').innerText = txt;
+        // --- MANAGEMENT OPERATIONS ---
+        function registerBleNode() {
+            if(currentRole === "viewer") return;
+            let rawId = document.getElementById('ble-raw-id').value;
+            let alias = document.getElementById('ble-alias-name').value;
+            if(!rawId || !alias) return alert("מלא את שני השדות");
+            db.ref('registered_nodes/' + rawId).set(alias);
+            document.getElementById('ble-raw-id').value = '';
+            document.getElementById('ble-alias-name').value = '';
         }
 
-        // --- TIME TRAVEL HISTORICAL BACKTRACKING LAYER ---
-        function loadHistoricalDay() {
-            if(!currentSID) return alert("Select a Target Guard First.");
-            initPieCharts();
-            onTimeSliderChange(document.getElementById('time-slider').value);
-        }
-
-        function onTimeSliderChange(val) {
-            let hh = String(Math.floor(val / 60)).padStart(2, '0');
-            let mm = String(val % 60).padStart(2, '0');
-            document.getElementById('slider-time-label').innerText = `${hh}:${mm}`;
+        function createUserProfile() {
+            if(currentRole === "viewer") return;
+            let u = document.getElementById('setup-username').value;
+            let p = document.getElementById('setup-password').value;
+            let type = document.getElementById('setup-type').value;
+            if(!u || !p) return alert("הזן שם משתמש וסיסמה");
             
-            if(!currentSID) return;
-            db.ref(`historical_logs/${currentSID}`).once('value', snap => {
-                let logs = snap.val() || {};
-                let motionCounts = [0, 0, 0], audioSum = [0,0,0];
-                Object.keys(logs).forEach(k => {
-                    let l = logs[k];
-                    if(l.rawState === "Static / Sitting") motionCounts[0]++;
-                    else if (l.rawState === "Patrol / Walking") motionCounts[1]++;
-                    else motionCounts[2]++;
-                    
-                    if(l.audio_db < 50) audioSum[0]++;
-                    else if(l.audio_db < 75) audioSum[1]++;
-                    else audioSum[2]++;
-                });
-                
-                pieM.data.datasets[0].data = motionCounts; pieM.update();
-                pieA.data.datasets[0].data = audioSum; pieA.update();
-            });
-        }
-
-        // --- AUX UI MODAL, ROUTING & CORE CODEBASE PLUMBING ---
-        function openNodeModal() {
-            if(!currentSID) return alert("Select a target guard session from the sidebar hierarchy first.");
-            const s = activeSessions[currentSID]; if(!s || !s.ble_distances) return alert("Target guard device is not currently transmitting telemetry frames.");
-            const selectEl = document.getElementById('modal-node-select'); selectEl.innerHTML = '';
-            Object.keys(s.ble_distances).forEach(n => { selectEl.innerHTML += `<option value="${n}">${n}</option>`; });
-            document.getElementById('node-modal').style.display = 'flex';
-        }
-        function confirmNodeAlias() {
-            const rawName = document.getElementById('modal-node-select').value;
-            const aliasName = document.getElementById('modal-node-alias').value;
-            if(rawName && aliasName && currentSID) { db.ref(`active_shifts/${currentSID}/node_aliases/${rawName}`).set(aliasName); document.getElementById('node-modal').style.display = 'none'; }
-        }
-
-        function refreshLiveOutputs() {
-            if(currentSID && activeSessions[currentSID]) {
-                const s = activeSessions[currentSID];
-                document.getElementById('focus-status').innerText = s.status;
-                document.getElementById('focus-status').className = alertSubscriptions.includes(s.status) ? 'profile-status alert' : 'profile-status';
-                document.getElementById('focus-group').innerText = s.group || "Unassigned";
-                document.getElementById('focus-mic').innerText = (s.audio_db ? Math.round(s.audio_db) : "--") + " dB";
-                document.getElementById('focus-mic').style.color = s.audio_db > 85 ? "var(--alert-red)" : "#fff";
-                if(s.telemetry_batch) playbackQueue = playbackQueue.concat(s.telemetry_batch.data);
-                renderDistanceChart(s);
-                renderDualTimelines(currentSID);
-            }
-        }
-
-        function renderDistanceChart(guardData) {
-            if(!guardData.ble_distances) { locChart.data.datasets = []; locChart.update(); return; }
-            let legendHTML = ''; let activeNodes = Object.keys(guardData.ble_distances);
-            locChart.data.datasets = activeNodes.map((rawNodeName, index) => {
-                let color = nodeColors[index % nodeColors.length];
-                let displayName = (guardData.node_aliases && guardData.node_aliases[rawNodeName]) ? guardData.node_aliases[rawNodeName] : rawNodeName;
-                legendHTML += `<div class="legend-item"><div class="legend-color" style="background:${color};"></div>${displayName}</div>`;
-                let existingDataset = locChart.data.datasets.find(d => d.label === displayName);
-                let dataArray = existingDataset ? existingDataset.data : new Array(30).fill(15);
-                dataArray.push(guardData.ble_distances[rawNodeName]); if(dataArray.length > 30) dataArray.shift();
-                return { label: displayName, data: dataArray, borderColor: color, borderWidth: 2, tension: 0.3, fill: false };
-            });
-            document.getElementById('chart-legend').innerHTML = legendHTML; locChart.update();
+            db.ref('users_database/' + u).set({ username: u, password: p, classification: type });
+            alert(`משתמש ${u} נרשם בהצלחה לפיילוט.`);
         }
 
         function scheduleTask() {
-            if(!currentSID) return alert("Select a target guard execution frame session.");
+            if(currentRole === "viewer") return;
+            let targetGuard = document.getElementById('task-guard-target').value;
             let nodeAnchor = document.getElementById('task-node-target').value;
             let timeStart = document.getElementById('task-time-start').value;
             let timeEnd = document.getElementById('task-time-end').value;
             let inst = document.getElementById('task-inst').value;
             let aiPrompt = document.getElementById('task-ai-prompt').value;
+
+            if(!targetGuard || !timeStart || !timeEnd || !inst) return alert("מלא את פרטי המשימה הבסיסיים");
             
-            if(!timeStart || !timeEnd || !inst) return alert("Complete scheduled baseline parameters.");
-            let ref = db.ref(`active_shifts/${currentSID}/tasks`).push();
-            ref.set({ id: ref.key, nodeAnchor, timeStart, timeEnd, instruction: inst, aiPrompt, status: "pending", alertOnFail: document.getElementById('task-alert-fail').checked });
-            db.ref(`active_shifts/${currentSID}/new_task_trigger`).set(Date.now());
-            alert("Secure task matrix pushed to endpoint.");
+            let ref = db.ref(`active_shifts/${targetGuard}/tasks`).push();
+            ref.set({ id: ref.key, nodeAnchor, timeStart, timeEnd, instruction: inst, aiPrompt, status: "pending" });
+            alert("המשימה נדחפה בהצלחה למכשיר הקצה של השומר.");
         }
 
+        function acknowledgeIncident() {
+            if(currentIncidentKey) {
+                db.ref(`active_shifts/${currentIncidentKey}`).update({ status: 'Standing / Active' });
+                db.ref(`active_shifts/${currentIncidentKey}/hardware_challenge`).remove();
+                document.getElementById('global-ring-alert').style.display = 'none';
+            }
+        }
+
+        // --- RENDERING HANDLERS ---
         function renderSidebar() {
             const list = document.getElementById('session-list'); list.innerHTML = '';
-            ["Unassigned", "Security", "Cleaning", "Maintenance"].forEach(grp => {
-                let grpDiv = document.createElement('div'); grpDiv.innerHTML = `<div class="group-header">📁 ${grp} Group</div>`;
-                Object.keys(activeSessions).forEach(sid => {
-                    const s = activeSessions[sid];
-                    if ((s.group || "Unassigned") === grp && s.role !== "manager") {
-                        let isAlert = alertSubscriptions.includes(s.status);
-                        grpDiv.innerHTML += `<div class="session-item ${currentSID === sid ? 'active' : ''}" onclick="selectSession('${sid}')"><div><strong>${s.name}</strong><br><span style="color:${isAlert?'var(--alert-red)':'var(--cyber-blue)'}">${s.status}</span></div></div>`;
-                    }
-                });
-                list.appendChild(grpDiv);
+            Object.keys(activeSessions).forEach(sid => {
+                let s = activeSessions[sid]; if(s.role === "manager") return;
+                list.innerHTML += `<div class="session-item ${currentSID === sid ? 'active' : ''}" onclick="selectSession('${sid}')"><div><strong>${s.name}</strong> [${s.group}]<br><span>${s.status}</span></div></div>`;
             });
         }
 
         function selectSession(sid) {
-            currentSID = sid; const s = activeSessions[sid];
-            document.getElementById('focus-name').innerText = s.name; document.getElementById('focus-id').innerText = sid;
-            document.getElementById('task-target-name').innerText = s.name;
+            currentSID = sid;
+            let s = activeSessions[sid];
+            document.getElementById('focus-name').innerText = s.name;
+            
             db.ref(`active_shifts/${sid}/tasks`).on('value', snap => {
-                let d = snap.val() || {}; let display = document.getElementById('task-list-display'); display.innerHTML = '';
-                Object.keys(d).forEach(k => {
-                    let t = d[k];
-                    let imgEl = t.image ? `<br><img src="${t.image}" style="max-width:100%; border:2px solid var(--alert-red); margin-top:5px;"/>` : '';
-                    display.innerHTML += `<div class="task-item"><strong>[${t.timeStart} - ${t.timeEnd}] Target: ${t.nodeAnchor}</strong><br>Instruction: ${t.instruction}<br><span style="color:var(--cyber-blue)">Report: ${t.auditReport || 'Awaiting execution Checkpoint'}</span>${imgEl}</div>`;
+                let tasks = snap.val() || {};
+                let display = document.getElementById('task-list-display'); display.innerHTML = '';
+                Object.keys(tasks).forEach(k => {
+                    let t = tasks[k];
+                    let imgHtml = t.image ? `<br><img src="${t.image}" style="max-width:100%; border:2px solid red;"/>` : '';
+                    display.innerHTML += `<div style="background:#000; padding:10px; margin-bottom:5px; border-right:3px solid var(--cyber-blue);"><strong>[${t.timeStart}-${t.timeEnd}] ${t.nodeAnchor}</strong><br>סטטוס: ${t.status}<br><small>${t.auditReport || 'אין דוח AI עדיין'}</small>${imgHtml}</div>`;
                     
-                    // יירוט תמונות הממתינות לניתוח ה-OpenAI המולטי-מודאלי
                     if (t.status === "awaiting_ai_audit" && t.rawCapturedImage) {
                         db.ref(`active_shifts/${sid}/tasks/${k}/status`).set("processing_ai");
                         runOpenAIVisionAnalysis(t.rawCapturedImage, t.aiPrompt, `active_shifts/${sid}/tasks/${k}`);
                     }
                 });
             });
-            refreshLiveOutputs();
         }
 
-        function updateTargetDropdowns() {
-            const chatSel = document.getElementById('chat-target-select');
-            const vidSel = document.getElementById('video-target-select');
-            if(chatSel.options.length > 5) return;
-            Object.keys(activeSessions).forEach(sid => { if(activeSessions[sid].role !== "manager") { chatSel.innerHTML += `<option value="User_${sid}">User: ${activeSessions[sid].name}</option>`; vidSel.innerHTML += `<option value="${sid}">Call: ${activeSessions[sid].name}</option>`; } });
+        function refreshLiveOutputs() {
+            if(!currentSID || !activeSessions[currentSID]) return;
+            let s = activeSessions[currentSID];
+            document.getElementById('focus-status').innerText = `סטטוס: ${s.status}`;
+            document.getElementById('focus-mic').innerText = `${Math.round(s.audio_db || 40)} dB`;
+            if(s.telemetry_batch) {
+                s.telemetry_batch.data.forEach(d => { gData.ax.push(d.ax); gData.ax.shift(); gData.ay.push(d.ay); gData.ay.shift(); gData.az.push(d.az); gData.az.shift(); });
+                telChart.update();
+            }
+            renderDualTimelines(currentSID);
         }
 
-        function sendManagerChat() {
-            const target = document.getElementById('chat-target-select').value;
-            const msg = document.getElementById('manager-chat-input').value; if(!msg) return;
-            const payload = { sender: myManagerName, msg: msg, timestamp: Date.now() };
-            if(target === 'Global') db.ref('chats/Global').push(payload);
-            else if (target.startsWith('Group_')) db.ref(`chats/Groups/${target.replace('Group_', '')}`).push(payload);
-            else db.ref(`active_shifts/${target.replace('User_', '')}/messages`).push(payload);
-            document.getElementById('manager-chat-input').value = '';
+        function renderDualTimelines(sid) {
+            let s = activeSessions[sid];
+            const pBar = document.getElementById('planned-timeline-bar'); pBar.innerHTML = '';
+            const aBar = document.getElementById('actual-timeline-bar'); aBar.innerHTML = '';
+            
+            if(s && s.tasks) {
+                Object.keys(s.tasks).forEach(k => { let t = s.tasks[k]; pBar.innerHTML += `<div class="timeline-block" style="background:var(--focus-orange); width:25%;">${t.nodeAnchor}</div>`; });
+            }
+            db.ref(`historical_logs/${sid}`).limitToLast(6).once('value', snap => {
+                let logs = snap.val() || {};
+                Object.keys(logs).forEach(k => { aBar.innerHTML += `<div class="timeline-block" style="background:var(--task-green); width:16%;">${logs[k].closestNode}</div>`; });
+            });
         }
 
-        function switchView(viewId) { document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); }
-        
-        let simInterval, mockState = 'sit';
-        function setMockState(st) { mockState = st; }
-        function startSimulatedShift() {
-            document.getElementById('sim-setup').style.display='none'; document.getElementById('sim-controls').style.display='block';
-            let sid = "guard_sim_node";
-            simInterval = setInterval(() => {
-                let simBuffer = []; for(let i=0; i<10; i++) simBuffer.push({ ax: 0, ay: 0, az: mockState === 'crash' ? 25 : 9.8 });
-                let status = mockState === 'sleep' ? 'Sitting' : 'Standing / Active';
-                let audio = mockState === 'sleep' ? 35 : 55;
-                db.ref('active_shifts/' + sid).update({ id: sid, name: "Simulation Node Asset", role: "guard", status: status, audio_db: audio, telemetry_batch: { data: simBuffer, id: Date.now() }, ble_distances: { "Server Room 1": 1.2, "Main Gate": 8.5 }, timestamp: Date.now() });
-            }, 1000);
+        function renderBleNodesList() {
+            let box = document.getElementById('ble-list-box'); box.innerHTML = '';
+            Object.keys(globalBleNodes).forEach(k => { box.innerHTML += `<p style="margin:4px 0; font-size:0.9em;">📍 <strong>${k}</strong> ➔ ${globalBleNodes[k]}</p>`; });
         }
-        function stopSimulatedShift() { clearInterval(simInterval); }
-        
-        let localStream, peerConnection;
-        async function startManagerVideoCall() { alert("Initiating WebRTC stream handshake link layer."); }
-        function hangUp() { if(peerConnection) peerConnection.close(); }
 
-        window.onload = () => { initPieCharts(); alertSubscriptions.forEach(s => { document.getElementById('alert-settings-grid').innerHTML += `<label><input type="checkbox" checked disabled> ${s}</label>`; }); };
+        function renderUsersList(users) {
+            let box = document.getElementById('users-list-box'); box.innerHTML = '';
+            Object.keys(users).forEach(k => { box.innerHTML += `<p style="margin:4px 0; font-size:0.9em;">👤 <strong>${k}</strong> (${users[k].classification})</p>`; });
+        }
+
+        function updateDropdownNodes() {
+            let sel = document.getElementById('task-node-target'); sel.innerHTML = '';
+            Object.keys(globalBleNodes).forEach(k => { sel.innerHTML += `<option value="${globalBleNodes[k]}">${globalBleNodes[k]}</option>`; });
+        }
+
+        function updateGuardSelectionDropdowns() {
+            let sel = document.getElementById('task-guard-target');
+            if(sel.options.length === Object.keys(activeSessions).filter(k => activeSessions[k].role==='guard').length) return;
+            sel.innerHTML = '';
+            Object.keys(activeSessions).forEach(k => { if(activeSessions[k].role === 'guard') sel.innerHTML += `<option value="${k}">${activeSessions[k].name}</option>`; });
+        }
+
+        function switchView(id) { document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function triggerManagerCriticalAlert(t) { document.getElementById('global-ring-alert').style.display='block'; document.getElementById('alert-details').innerText=t; }
+        function loadHistoricalDay() {}
+        function onTimeSliderChange(v) { document.getElementById('slider-time-label').innerText = `${String(Math.floor(v/60)).padStart(2,'0')}:${String(v%60).padStart(2,'0')}`; }
     </script>
 </body>
-</html>F
+</html>
